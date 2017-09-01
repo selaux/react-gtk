@@ -1,4 +1,6 @@
 const R = require('ramda');
+const kebabCase = require('just-kebab-case');
+const camelCase = require('just-camel-case');
 const ReactFiberReconciler = require('react-dom/lib/ReactFiberReconciler');
 
 function log(...args) {
@@ -16,8 +18,29 @@ function getPath(path, obj) {
 const withoutChildren = R.omit([ 'children' ]);
 const stringify = JSON.stringify;
 
+function signalHandlerToName(handlerName) {
+    return kebabCase(handlerName.slice(2));
+}
+
+function getSignalHandlersFromProps(GObject, type, props) {
+    return R.pipe(
+        R.keys,
+        R.filter(R.startsWith('on')),
+        R.filter(h => GObject.signal_lookup(signalHandlerToName(h), type) !== 0)
+    )(props);
+}
+
+function addSignalHandlers(instance, handlers) {
+    return R.pipe(
+        R.toPairs,
+        R.forEach(([ name, fn ]) => instance.connect(signalHandlerToName(name), fn))
+    )(handlers);
+}
+
 module.exports = function (imports) {
     const Gtk = imports.gi.Gtk;
+    const GObject = imports.gi.GObject;
+
     const GtkReconciler = ReactFiberReconciler({
         // the tree creation and updating methods. If you’re familiar with the DOM API
         // this will look familiar
@@ -27,12 +50,18 @@ module.exports = function (imports) {
 
             const path = type.split('.');
             const Type = getPath(path, imports.gi);
+            const signalHandlers = getSignalHandlersFromProps(GObject, Type, props);
 
             const appliedProps = R.pipe(
+                R.omit(signalHandlers),
                 withoutChildren,
                 R.when(R.always(type === 'Gtk.ApplicationWindow'), R.assoc('application', rootContainerInstance))
             )(props);
             const instance = new Type(appliedProps);
+
+            addSignalHandlers(instance, R.pick(signalHandlers, props));
+
+            // TODO: Maybe do after mount
             instance.show_all();
 
             return instance;
@@ -95,7 +124,7 @@ module.exports = function (imports) {
             const unset = R.without(R.keys(newNoChildren), R.keys(oldNoChildren));
             const set = R.reject(R.contains(R.__, R.toPairs(oldNoChildren)), R.toPairs(newNoChildren));
 
-            log('prepareUpdate', stringify(oldNoChildren), stringify(newNoChildren), propsAreEqual);
+            log('prepareUpdate', stringify(oldNoChildren), stringify(newNoChildren), !propsAreEqual);
             return propsAreEqual ? null : { unset, set };
         },
 
@@ -135,12 +164,12 @@ module.exports = function (imports) {
         // upon being in an `html`, `svg`, `mathml`, or other context of the tree.
 
         getRootHostContext(rootContainerInstance) {
-            log('getRootHostContext');
+            // log('getRootHostContext');
             return {};
         },
 
         getChildHostContext(parentHostContext, type) {
-            log('getChildHostContext');
+            // log('getChildHostContext');
             return parentHostContext;
         },
 
@@ -170,7 +199,7 @@ module.exports = function (imports) {
         },
 
         shouldSetTextContent(props) {
-            log('shouldSetTextContent');
+            // log('shouldSetTextContent');
             return false
         },
 
@@ -234,7 +263,6 @@ module.exports = function (imports) {
     };
 
     const roots = new Map();
-    const emptyObject = {};
 
     return ReactGtk;
 };

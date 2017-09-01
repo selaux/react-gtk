@@ -9,32 +9,19 @@ const Mainloop = imports.mainloop;
 
 const MyApp = React.createClass({
     getInitialState () {
-        return { ticks: 0 };
+        return { clicks: 0 };
     },
 
-    runInterval() {
-        this.interval = Mainloop.timeout_add(1000, () => {
-            this.setState({ ticks: this.state.ticks + 1 });
-            return true;
-        });
-    },
-
-    componentDidMount() {
-        this.runInterval();
+    increaseClicks() {
+        this.setState({ clicks: this.state.clicks + 1 });
     },
 
     render() {
-        const isOdd = this.state.ticks % 2 === 1;
-        const alignStart = R.assoc('valign', Gtk.Align.START);
-        const labelProps = R.when(R.always(isOdd), alignStart)({ label: 'Hello ' + this.state.ticks });
+        const label = `${this.state.clicks} Click${this.state.clicks === 1 ? '' : 's'}`;
 
-        return h('Gtk.ApplicationWindow', { title: 'Test' }, [
-            h('Gtk.Label', labelProps)
-        ]);
-            // h('Gtk.Window', { title: 'Test' }, [
-            //     h('Gtk.Button', { label: 'Hello' })
-            // ]),
-            // h('Gtk.AboutDialog', { 'program-name': 'Hello World' });
+        return h('Gtk.ApplicationWindow', { title: 'Increase me' },
+            h('Gtk.Button', { label, onClicked: this.increaseClicks })
+        );
     }
 });
 

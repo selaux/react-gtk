@@ -13,9 +13,11 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "just-camel-case": "^1.0.0",
+    "just-kebab-case": "^1.0.0",
+    "ramda": "0.24.1",
     "react": "16.0.0-alpha.3",
-    "react-dom": "16.0.0-alpha.3",
-    "ramda": "0.24.1"
+    "react-dom": "16.0.0-alpha.3"
   },
   "devDependencies": {
     "webpack": "3.5.5"
