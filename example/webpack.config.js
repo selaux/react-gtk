@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-    entry: './index.js',
+    entry: path.resolve(__dirname, 'index.js'),
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
