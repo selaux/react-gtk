@@ -1,0 +1,23 @@
+{
+  "name": "react-gtk",
+  "version": "0.1.0",
+  "description": "React renderer for gtk applications inside gjs",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "gtk",
+    "react"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "react": "16.0.0-alpha.3",
+    "react-dom": "16.0.0-alpha.3",
+    "ramda": "0.24.1"
+  },
+  "devDependencies": {
+    "webpack": "3.5.5"
+  }
+}
