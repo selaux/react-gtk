@@ -1,11 +1,9 @@
 const ReactGtk = require('../src/index');
 const React = require('react');
-const R = require('ramda');
 const h = React.createElement;
 
 const Gtk = imports.gi.Gtk;
 const Application = Gtk.Application;
-const Mainloop = imports.mainloop;
 
 const MyApp = React.createClass({
     getInitialState () {
