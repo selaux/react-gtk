@@ -72,7 +72,7 @@ module.exports = function (imports) {
         // added in https://github.com/facebook/react/pull/8400/
         appendInitialChild(parentInstance, child) {
             log('appendInitialChild', parentInstance, child);
-            if (R.is(Gtk.Bin, parentInstance)) {
+            if (R.is(Gtk.Container, parentInstance)) {
                 parentInstance.add(child);
             }
         },
@@ -80,14 +80,14 @@ module.exports = function (imports) {
 
         appendChild(parentInstance, child) {
             log('appendChild', parentInstance, child);
-            if (R.is(Gtk.Bin, parentInstance)) {
+            if (R.is(Gtk.Container, parentInstance)) {
                 parentInstance.add(child);
             }
         },
 
         removeChild(parentInstance, child) {
             log('removeChild', parentInstance, child);
-            if (R.is(Gtk.Bin, parentInstance)) {
+            if (R.is(Gtk.Container, parentInstance)) {
                 parentInstance.remove(child);
             }
         },
@@ -179,10 +179,7 @@ module.exports = function (imports) {
 
         getPublicInstance(instance) {
             log('getPublicInstance');
-            if (instance == null) {
-                return null;
-            }
-            return instance != null && instance.props.toJSON(instance);
+            return instance;
         },
 
         // the prepareForCommit and resetAfterCommit methods are necessary for any

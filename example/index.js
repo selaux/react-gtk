@@ -18,7 +18,10 @@ const MyApp = React.createClass({
         const label = `${this.state.clicks} Click${this.state.clicks === 1 ? '' : 's'}`;
 
         return h('Gtk.ApplicationWindow', { title: 'Increase me', defaultWidth: 640, defaultHeight: 480 },
-            h('Gtk.Button', { label, onClicked: this.increaseClicks })
+            h('Gtk.VBox', {}, [
+                h('Gtk.Label',  { label }),
+                h('Gtk.Button', { label: 'Click me!', onClicked: this.increaseClicks })
+            ])
         );
     }
 });
