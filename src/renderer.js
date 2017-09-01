@@ -13,6 +13,9 @@ function getPath(path, obj) {
     return current;
 }
 
+const withoutChildren = R.omit([ 'children' ]);
+const stringify = JSON.stringify;
+
 module.exports = function (imports) {
     const Gtk = imports.gi.Gtk;
     const GtkReconciler = ReactFiberReconciler({
@@ -26,7 +29,7 @@ module.exports = function (imports) {
             const Type = getPath(path, imports.gi);
 
             const appliedProps = R.pipe(
-                R.omit([ 'children' ]),
+                withoutChildren,
                 R.when(R.always(type === 'Gtk.ApplicationWindow'), R.assoc('application', rootContainerInstance))
             )(props);
             const instance = new Type(appliedProps);
@@ -40,7 +43,7 @@ module.exports = function (imports) {
         // added in https://github.com/facebook/react/pull/8400/
         appendInitialChild(parentInstance, child) {
             log('appendInitialChild', parentInstance, child);
-            if (R.is(Gtk.ApplicationWindow, parentInstance)) {
+            if (R.is(Gtk.Bin, parentInstance)) {
                 parentInstance.add(child);
             }
         },
@@ -48,14 +51,16 @@ module.exports = function (imports) {
 
         appendChild(parentInstance, child) {
             log('appendChild', parentInstance, child);
-            if (R.is(Gtk.ApplicationWindow, parentInstance)) {
+            if (R.is(Gtk.Bin, parentInstance)) {
                 parentInstance.add(child);
             }
         },
 
         removeChild(parentInstance, child) {
             log('removeChild', parentInstance, child);
-            // parentInstance.removeChild(child);
+            if (R.is(Gtk.Bin, parentInstance)) {
+                parentInstance.remove(child);
+            }
         },
 
         insertBefore(parentInstance, child, beforeChild) {
@@ -84,22 +89,32 @@ module.exports = function (imports) {
             rootContainerInstance,
             hostContext
         ) {
-            log('TODO: prepareUpdate');
-            return null;
-            // return diffProperties(instance, type, oldProps, newProps, rootContainerInstance, hostContext);
+            const oldNoChildren = withoutChildren(oldProps);
+            const newNoChildren = withoutChildren(newProps);
+            const propsAreEqual = R.equals(oldNoChildren, newNoChildren);
+            const unset = R.without(R.keys(newNoChildren), R.keys(oldNoChildren));
+            const set = R.reject(R.contains(R.__, R.toPairs(oldNoChildren)), R.toPairs(newNoChildren));
+
+            log('prepareUpdate', stringify(oldNoChildren), stringify(newNoChildren), propsAreEqual);
+            return propsAreEqual ? null : { unset, set };
         },
 
         commitUpdate(
             instance,
-            updatePayload,
+            changes,
             type,
             oldProps,
             newProps,
             internalInstanceHandle
         ) {
-            // Apply the diff to the DOM node.
-            // updateProperties(instance, updatePayload, type, oldProps, newProps);
-            log('TODO: updateProperties');
+            log('commitUpdate', stringify(changes));
+
+            R.forEach(([ property, value ]) => {
+                instance[property] = value;
+            }, changes.set);
+            R.forEach((property) => {
+                instance[property] = null;
+            }, changes.unset);
         },
 
         // commitMount is called after initializeFinalChildren *if*
