@@ -5,7 +5,8 @@
   "main": "src/index.js",
   "scripts": {
     "start": "webpack --config example/webpack.config.js && gjs example/dist/app.js",
-    "test": "mocha test/unit/**/*.js"
+    "test": "nyc npm run test:unit",
+    "test:unit": "mocha test/unit/**/*.js"
   },
   "keywords": [
     "gtk",
@@ -23,7 +24,20 @@
   "devDependencies": {
     "chai": "^4.1.2",
     "mocha": "^3.5.0",
+    "nyc": "^11.2.1",
     "sinon": "^3.2.1",
     "webpack": "3.5.5"
+  },
+  "nyc": {
+    "cache": false,
+    "all": true,
+    "include": [
+      "src/**/*.js"
+    ],
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ],
+    "report-dir": "./test-output/nyc"
   }
 }
