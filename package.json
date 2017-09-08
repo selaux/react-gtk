@@ -4,7 +4,8 @@
   "description": "React renderer for gtk applications inside gjs",
   "main": "src/index.js",
   "scripts": {
-    "start": "webpack --config example/webpack.config.js && gjs example/dist/app.js"
+    "start": "webpack --config example/webpack.config.js && gjs example/dist/app.js",
+    "test": "mocha test/unit/**/*.js"
   },
   "keywords": [
     "gtk",
@@ -20,6 +21,9 @@
     "react-dom": "16.0.0-alpha.3"
   },
   "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^3.5.0",
+    "sinon": "^3.2.1",
     "webpack": "3.5.5"
   }
 }
