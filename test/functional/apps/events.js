@@ -1,4 +1,4 @@
-const ReactGtk = require('../../../src/index');
+const ReactGtk = require('../../../src');
 const React = require('react');
 const h = React.createElement;
 
@@ -7,22 +7,33 @@ const Application = Gtk.Application;
 
 const MyApp = React.createClass({
     getInitialState () {
-        return { clicks: 0 };
+        return { disableEvent: false, value: 0, increment: 1 };
     },
 
-    increaseClicks() {
-        this.setState({ clicks: this.state.clicks + 1 });
+    toggleEvent() {
+        this.setState({ disableEvent: !this.state.disableEvent });
+    },
+
+    increase(inc) {
+        this.setState({ value: this.state.value + inc });
+    },
+
+    increaseIncrement() {
+        this.setState({ increment: this.state.increment + 1 });
     },
 
     render() {
-        const label = `${this.state.clicks} Click${this.state.clicks === 1 ? '' : 's'}`;
+        const valueLabel = `Value: ${this.state.value}`;
+        const buttonLabel = this.state.disableEvent ? 'Enable Event' : 'Disable Event';
+        const onClicked = this.state.disableEvent ? null : this.increase.bind(this, this.state.increment);
 
-        return h('Gtk.ApplicationWindow', { title: 'Increase me', defaultWidth: 640, defaultHeight: 480 },
+        return h('Gtk.ApplicationWindow', { title: 'react-gtk events test', defaultWidth: 200, defaultHeight: 100 },
             h('Gtk.VBox', {}, [
-                h('Gtk.Label',  { label }),
-                h('Gtk.Button', { label: 'Click me!', onClicked: this.increaseClicks })
-            ])
-        );
+                h('Gtk.Label',  { key: 0, label: valueLabel }),
+                h('Gtk.Button', { key: 1, label: 'Increase', onClicked }),
+                h('Gtk.Button', { key: 2, label: 'Increase Increment', onClicked: this.increaseIncrement }),
+                h('Gtk.Button', { key: 3, label: buttonLabel, onClicked: this.toggleEvent })
+            ]));
     }
 });
 
@@ -33,6 +44,4 @@ const app = new Application();
 app.connect('activate', () => {
     ReactGtk.render(h(MyApp), app);
 });
-
-print("Starting app");
 app.run([]);
