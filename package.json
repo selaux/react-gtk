@@ -6,7 +6,8 @@
   "scripts": {
     "start": "webpack --config example/webpack.config.js && gjs example/dist/app.js",
     "test": "nyc npm run test:unit",
-    "test:unit": "mocha test/unit/**/*.js"
+    "test:unit": "mocha test/unit/**/*.js",
+    "test:functional": "webpack --config test/functional/webpack.config.js && python test/functional/specs/events_spec.py"
   },
   "keywords": [
     "gtk",
