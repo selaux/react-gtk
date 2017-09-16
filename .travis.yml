@@ -1,4 +1,4 @@
 language: nix
 script:
-  - nix-shell --pure --run "npm i"
-  - nix-shell --pure --run "npm test"
+  - nix-shell --run "npm i"
+  - nix-shell --run "npm test"
