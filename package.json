@@ -7,7 +7,8 @@
     "start": "webpack --config example/webpack.config.js && gjs example/dist/app.js",
     "test": "nyc npm run test:unit && npm run test:functional",
     "test:unit": "mocha test/unit/**/*.js",
-    "test:functional": "webpack --config test/functional/webpack.config.js && nix-build test/functional -A test"
+    "build:functional": "webpack --config test/functional/webpack.config.js",
+    "test:functional": "npm run build:functional && nix-build test/functional -A test"
   },
   "keywords": [
     "gtk",

@@ -17,23 +17,41 @@ function getPath(path, obj) {
 const withoutChildren = R.omit([ 'children' ]);
 const stringify = JSON.stringify;
 
-function signalHandlerToName(handlerName) {
+function propNameToSignal(handlerName) {
     return kebabCase(handlerName.slice(2));
+}
+
+function isSignalHandler(GObject, type, propName) {
+    return GObject.signal_lookup(propNameToSignal(propName), type) !== 0;
 }
 
 function getSignalHandlersFromProps(GObject, type, props) {
     return R.pipe(
         R.keys,
         R.filter(R.startsWith('on')),
-        R.filter(h => GObject.signal_lookup(signalHandlerToName(h), type) !== 0)
+        R.filter(R.partial(isSignalHandler, [ GObject, type ]))
     )(props);
 }
 
-function addSignalHandlers(instance, handlers) {
-    return R.pipe(
+function addSignalHandlers(instance, set, unset) {
+    const disconnectFromInstance = (signalName) => {
+        if (typeof instance._connectedSignals[signalName] !== "undefined") {
+            instance.disconnect(instance._connectedSignals[signalName]);
+            delete instance._connectedSignals[signalName];
+        }
+    };
+    instance._connectedSignals = instance._connectedSignals || {};
+
+
+    R.forEach(R.pipe(propNameToSignal, disconnectFromInstance), unset);
+    R.pipe(
         R.toPairs,
-        R.forEach(([ name, fn ]) => instance.connect(signalHandlerToName(name), fn))
-    )(handlers);
+        R.forEach(([ name, fn ]) => {
+            const signalName = propNameToSignal(name);
+            disconnectFromInstance(signalName);
+            instance._connectedSignals[signalName] = instance.connect(signalName, fn);
+        })
+    )(set);
 }
 
 module.exports = function (imports) {
@@ -58,7 +76,7 @@ module.exports = function (imports) {
             )(props);
             const instance = new Type(appliedProps);
 
-            addSignalHandlers(instance, R.pick(signalHandlers, props));
+            addSignalHandlers(instance, R.pick(signalHandlers, props), []);
 
             return instance;
         },
@@ -137,6 +155,14 @@ module.exports = function (imports) {
             internalInstanceHandle
         ) {
             log('commitUpdate', stringify(changes));
+            const isValidHandler = R.partial(isSignalHandler, [ GObject, instance ]);
+            const signalHandlersToSet = R.pipe(
+                R.filter(R.pipe(R.head, isValidHandler)),
+                R.fromPairs
+            )(changes.set);
+            const signalHandlersToUnset = R.filter(isValidHandler, changes.unset);
+
+            addSignalHandlers(instance, signalHandlersToSet, signalHandlersToUnset);
 
             R.forEach(([ property, value ]) => {
                 instance[property] = value;

@@ -26,11 +26,13 @@ const MyApp = React.createClass({
         const valueLabel = `Value: ${this.state.value}`;
         const buttonLabel = this.state.disableEvent ? 'Enable Event' : 'Disable Event';
         const onClicked = this.state.disableEvent ? null : this.increase.bind(this, this.state.increment);
+        const buttonBaseProps = { key: 1, label: 'Increase' };
+        const buttonProps = onClicked ? Object.assign(buttonBaseProps, { onClicked }) : buttonBaseProps;
 
         return h('Gtk.ApplicationWindow', { title: 'react-gtk events test', defaultWidth: 200, defaultHeight: 100 },
             h('Gtk.VBox', {}, [
                 h('Gtk.Label',  { key: 0, label: valueLabel }),
-                h('Gtk.Button', { key: 1, label: 'Increase', onClicked }),
+                h('Gtk.Button', buttonProps),
                 h('Gtk.Button', { key: 2, label: 'Increase Increment', onClicked: this.increaseIncrement }),
                 h('Gtk.Button', { key: 3, label: buttonLabel, onClicked: this.toggleEvent })
             ]));
