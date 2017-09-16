@@ -80,8 +80,11 @@ in
           $machine->waitForX;
           $machine->sleep(15);
           $machine->succeed("su - alice -c 'DISPLAY=:0.0 ${at_spi2_core}/libexec/at-spi-bus-launcher &'");
-          $machine->sleep(5);
-          $machine->succeed("su - alice -c 'DISPLAY=:0.0 ${testCases}/bin/events_spec.py'");
+          $machine->sleep(1);
+
+          my $out = './test-output';
+          $machine->succeed("su - alice -c 'DISPLAY=:0.0 OUT=$out ${testCases}/bin/events_spec.py'");
+
           $machine->screenshot("screen");
         '';
     });

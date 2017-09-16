@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import unittest
 from os import environ, makedirs
 from os.path import dirname, join, exists
 import sys
@@ -11,6 +12,7 @@ from dogtail.tree import *
 
 BUNDLES_LOCATION = 'test-output/functional'
 DUMPS_LOCATION = 'test/functional/dumps'
+OUT_LOCATION = 'test-output' if 'OUT' not in environ else environ['OUT']
 GJS = '/usr/bin/gjs'
 
 def trap_stdout(function):
@@ -24,51 +26,61 @@ def trap_stdout(function):
         sys.stdout = saved_stdout
     return output
 
-def check_against_dump(expected_file, node):
-    filename = join(DUMPS_LOCATION, expected_file)
+class TestEventsApp(unittest.TestCase):
+    name = "events"
 
-    if len([ x for x in argv if x == '--dump' ]) == 0:
+    def assertDump(self, expected, node):
+        expected_dump_filename = join(DUMPS_LOCATION, "{}/{}.dump".format(self.name, expected))
+        got_dump_filename = join(OUT_LOCATION, "{}/{}.dump".format(self.name, expected))
+
         sleep(1)
-        with open(filename, 'r') as f:
-            expected = f.read()
-            assert expected == trap_stdout(node.dump)
-    else:
-        sleep(1)
-        directory = dirname(filename)
+        dump = trap_stdout(node.dump)
+
+        directory = dirname(got_dump_filename)
         if not exists(directory):
             makedirs(directory)
-        with open(filename, 'w+') as f:
-            f.write(trap_stdout(node.dump))
+        with open(got_dump_filename, 'w+') as f:
+            f.write(dump)
 
-testApplicationProcess = None
-try:
-    appName = 'events'
+        expected = None
+        with open(expected_dump_filename, 'r') as f:
+            expected = f.read()
 
-    # Setup Application
-    testApplication = '{}/{}Bundle.js'.format(BUNDLES_LOCATION, appName)
-    testApplicationProcess = Popen([GJS, testApplication])
+        self.assertEqual(dump, expected)
 
-    app = root.childNamed('react-gtk {} test'.format(appName))
+    def setUp(self):
+        testApplication = '{}/{}Bundle.js'.format(BUNDLES_LOCATION, self.name)
+        self.testApplicationProcess = Popen([GJS, testApplication])
+        self.app = root.childNamed('react-gtk {} test'.format(self.name))
 
-    increaseButton = app.childNamed('Increase')
-    increaseIncrementButton = app.childNamed('Increase Increment')
-    disableButton = app.childNamed('Disable Event')
+    def tearDown(self):
+        self.testApplicationProcess.terminate()
+        self.testApplicationProcess.poll()
 
-    for i in range(0, 2):
-        increaseButton.click()
-    check_against_dump('events/increment1.dump', app)
+    def test_signal_registration(self):
+        increaseButton = self.app.childNamed('Increase')
 
-    increaseIncrementButton.click()
-    for i in range(0, 2):
-        increaseButton.click()
-    check_against_dump('events/increment2.dump', app)
+        for i in range(0, 2):
+            increaseButton.click()
+        self.assertDump('signal_registration', self.app)
 
-    disableButton.click()
-    for i in range(0, 2):
-        increaseButton.click()
-    check_against_dump('events/final.dump', app)
+    def test_signal_update(self):
+        increaseButton = self.app.childNamed('Increase')
+        increaseIncrementButton = self.app.childNamed('Increase Increment')
 
-finally:
-    if testApplicationProcess is not None:
-        testApplicationProcess.terminate()
-        testApplicationProcess.poll()
+        increaseIncrementButton.click()
+        for i in range(0, 2):
+            increaseButton.click()
+        self.assertDump('signal_update', self.app)
+
+    def test_signal_removal(self):
+        increaseButton = self.app.childNamed('Increase')
+        disableButton = self.app.childNamed('Disable Event')
+
+        disableButton.click()
+        for i in range(0, 2):
+            increaseButton.click()
+        self.assertDump('signal_removal', self.app)
+
+if __name__ == '__main__':
+    unittest.main()
