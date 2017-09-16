@@ -5,9 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "start": "webpack --config example/webpack.config.js && gjs example/dist/app.js",
-    "test": "nyc npm run test:unit",
+    "test": "nyc npm run test:unit && npm run test:functional",
     "test:unit": "mocha test/unit/**/*.js",
-    "test:functional": "webpack --config test/functional/webpack.config.js && python test/functional/specs/events_spec.py"
+    "test:functional": "webpack --config test/functional/webpack.config.js && nix-build test/functional -A test"
   },
   "keywords": [
     "gtk",

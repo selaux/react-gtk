@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from os import environ, makedirs
 from os.path import dirname, join, exists
 import sys
@@ -5,6 +7,11 @@ from sys import argv
 from subprocess import Popen
 from time import sleep
 from io import StringIO
+from dogtail.tree import *
+
+BUNDLES_LOCATION = 'test-output/functional'
+DUMPS_LOCATION = 'test/functional/dumps'
+GJS = '/usr/bin/gjs'
 
 def trap_stdout(function):
     saved_stdout = sys.stdout
@@ -18,43 +25,28 @@ def trap_stdout(function):
     return output
 
 def check_against_dump(expected_file, node):
-    filename = join(dirname(__file__), '../dumps/', expected_file)
+    filename = join(DUMPS_LOCATION, expected_file)
 
     if len([ x for x in argv if x == '--dump' ]) == 0:
+        sleep(1)
         with open(filename, 'r') as f:
             expected = f.read()
             assert expected == trap_stdout(node.dump)
     else:
+        sleep(1)
         directory = dirname(filename)
         if not exists(directory):
             makedirs(directory)
-        sleep(0.5)
         with open(filename, 'w+') as f:
-            sleep(0.5)
             f.write(trap_stdout(node.dump))
 
-spiBusProcess = None
 testApplicationProcess = None
-displayProcess = None
-
-displayId = ':10'
-displayEnv = { **dict(environ), 'DISPLAY': displayId }
-
 try:
-    displayProcess = Popen([environ['XEPHYR'], '-ac', '-br', displayId])
-    sleep(1)
-
-    # Setup a11y
-    spiBusProcess = Popen([environ['AT_SPI_BUS_LAUNCHER']], env=displayEnv)
-    sleep(1)
-
-    from dogtail.tree import *
-
     appName = 'events'
 
     # Setup Application
-    testApplication = '{}/functional/{}Bundle.js'.format(join(dirname(__file__), '../../../test-output'), appName)
-    testApplicationProcess = Popen(['gjs', testApplication], env=displayEnv)
+    testApplication = '{}/{}Bundle.js'.format(BUNDLES_LOCATION, appName)
+    testApplicationProcess = Popen([GJS, testApplication])
 
     app = root.childNamed('react-gtk {} test'.format(appName))
 
@@ -80,9 +72,3 @@ finally:
     if testApplicationProcess is not None:
         testApplicationProcess.terminate()
         testApplicationProcess.poll()
-    if spiBusProcess is not None:
-        spiBusProcess.terminate()
-        spiBusProcess.poll()
-    if displayProcess is not None:
-        displayProcess.terminate()
-        displayProcess.poll()
