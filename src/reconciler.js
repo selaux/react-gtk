@@ -4,8 +4,8 @@ const R = require('ramda');
 const kebabCase = require('just-kebab-case');
 const camelCase = require('just-camel-case');
 
-function getPath(path, obj) {
-    return path.reduce((acc, v) => acc[v], obj);
+function getConstructor(type, gi) {
+    return gi.Gtk[type.slice(3)];
 }
 
 const withoutChildren = R.omit([ 'children' ]);
@@ -74,14 +74,13 @@ module.exports = function (imports, log) {
         createInstance(type, props, rootContainerInstance, hostContext, internalInstanceHandle) {
             log('createInstance', type, props);
 
-            const path = type.split('.');
-            const Type = getPath(path, imports.gi);
+            const Type = getConstructor(type, imports.gi);
             const signalHandlers = getSignalHandlersFromProps(GObject, Type, props);
 
             const appliedProps = R.pipe(
                 R.omit(signalHandlers),
                 withoutChildren,
-                R.when(R.always(type === 'Gtk.ApplicationWindow'), R.assoc('application', rootContainerInstance))
+                R.when(R.always(type === 'GtkApplicationWindow'), R.assoc('application', rootContainerInstance))
             )(props);
             const instance = new Type(appliedProps);
 

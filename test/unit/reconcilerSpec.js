@@ -34,7 +34,7 @@ describe('reconciler.js', function () {
             const instance = {};
             imports.gi.Gtk.Label.returns(instance);
 
-            const gotInstance = Reconciler.createInstance('Gtk.Label', {});
+            const gotInstance = Reconciler.createInstance('GtkLabel', {});
 
             expect(imports.gi.Gtk.Label.callCount).to.equal(1);
             expect(gotInstance).to.equal(instance);
@@ -47,7 +47,7 @@ describe('reconciler.js', function () {
             const instance = {};
             imports.gi.Gtk.Label.returns(instance);
 
-            Reconciler.createInstance('Gtk.Label', { some: 'prop' });
+            Reconciler.createInstance('GtkLabel', { some: 'prop' });
 
             expect(imports.gi.Gtk.Label.firstCall.args).to.deep.equal([ { some: 'prop' } ]);
         });
@@ -59,7 +59,7 @@ describe('reconciler.js', function () {
             const instance = {};
             imports.gi.Gtk.Label.returns(instance);
 
-            Reconciler.createInstance('Gtk.Label', { some: 'prop', children: [] });
+            Reconciler.createInstance('GtkLabel', { some: 'prop', children: [] });
 
             expect(imports.gi.Gtk.Label.firstCall.args).to.deep.equal([ { some: 'prop' } ]);
         });
@@ -74,7 +74,7 @@ describe('reconciler.js', function () {
             imports.gi.GObject.signal_lookup.withArgs('clicked', imports.gi.Gtk.Label).returns(124);
 
             const handler = () => ({});
-            Reconciler.createInstance('Gtk.Label', { onClicked: handler, children: [] });
+            Reconciler.createInstance('GtkLabel', { onClicked: handler, children: [] });
 
             expect(instance.connect.firstCall.args).to.deep.equal([ 'clicked', handler ]);
             expect(instance._connectedSignals).to.deep.equal({ clicked: handleId });
@@ -88,7 +88,7 @@ describe('reconciler.js', function () {
             imports.gi.Gtk.Label.returns(instance);
             imports.gi.GObject.signal_lookup.returns(0);
 
-            Reconciler.createInstance('Gtk.Label', { onSomething: () => {}, children: [] });
+            Reconciler.createInstance('GtkLabel', { onSomething: () => {}, children: [] });
 
             expect(instance.connect.callCount).to.equal(0);
         });
@@ -102,7 +102,7 @@ describe('reconciler.js', function () {
             imports.gi.Gtk.ApplicationWindow.returns(instance);
             imports.gi.GObject.signal_lookup.returns(0);
 
-            Reconciler.createInstance('Gtk.ApplicationWindow', {}, application);
+            Reconciler.createInstance('GtkApplicationWindow', {}, application);
 
             expect(imports.gi.Gtk.ApplicationWindow.firstCall.args).to.deep.equal([ { application } ]);
         });
