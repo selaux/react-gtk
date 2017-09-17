@@ -6,7 +6,7 @@ const Gtk = imports.gi.Gtk;
 const Application = Gtk.Application;
 
 const MyApp = React.createClass({
-    getInitialState () {
+    getInitialState() {
         return { clicks: 0 };
     },
 
@@ -19,7 +19,7 @@ const MyApp = React.createClass({
 
         return h('Gtk.ApplicationWindow', { title: 'Increase me', defaultWidth: 640, defaultHeight: 480 },
             h('Gtk.VBox', {}, [
-                h('Gtk.Label',  { label }),
+                h('Gtk.Label', { label }),
                 h('Gtk.Button', { label: 'Click me!', onClicked: this.increaseClicks })
             ])
         );
@@ -34,5 +34,5 @@ app.connect('activate', () => {
     ReactGtk.render(h(MyApp), app);
 });
 
-print("Starting app");
+print('Starting app');
 app.run([]);

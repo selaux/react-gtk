@@ -5,7 +5,8 @@
   "main": "src/index.js",
   "scripts": {
     "start": "webpack --config example/webpack.config.js && gjs example/dist/app.js",
-    "test": "nyc npm run test:unit && npm run test:functional",
+    "test": "npm run lint && nyc npm run test:unit && npm run test:functional",
+    "lint": "eslint .",
     "test:unit": "mocha test/unit/**/*.js",
     "build:functional": "webpack --config test/functional/webpack.config.js",
     "test:functional": "npm run build:functional && nix-build test/functional -A test"
@@ -25,11 +26,48 @@
   },
   "devDependencies": {
     "chai": "^4.1.2",
+    "eslint": "^4.7.0",
+    "eslint-config-holidaycheck": "^0.12.1",
     "mocha": "^3.5.0",
     "nyc": "^11.2.1",
     "sinon": "^3.2.1",
     "webpack": "3.5.5"
   },
+  "eslintConfig": {
+    "extends": "holidaycheck/es2015",
+    "env": {
+      "node": true
+    },
+    "rules": {
+      "max-params": [ "error", 6 ],
+      "no-process-env": 0
+    },
+    "overrides": [
+      {
+        "files": ["test/functional/**/*.js", "example/**/*.js", "src/index.js"],
+        "globals": {
+          "imports": false,
+          "print": false
+        }
+      },
+      {
+        "files": ["test/unit/**/*.js", "example/**/*.js"],
+        "env": {
+          "mocha": true
+        },
+        "rules": {
+          "camelcase": 0,
+          "max-statements": [ "error", 15 ]
+        }
+      }
+    ]
+  },
+  "eslintIgnore": [
+    "test-output/**/*",
+    "result/**/*",
+    "node_modules/**/*",
+    "**/dist/**/*"
+  ],
   "nyc": {
     "cache": false,
     "all": true,

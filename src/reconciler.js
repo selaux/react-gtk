@@ -1,17 +1,11 @@
+/* eslint no-unused-vars: 0 */
+
 const R = require('ramda');
 const kebabCase = require('just-kebab-case');
 const camelCase = require('just-camel-case');
 
-function log(...args) {
-    if (process.env.DEBUG_REACT_GTK) {
-        print(...args);
-    }
-}
-
 function getPath(path, obj) {
-    let current = obj;
-    path.forEach(function(p) { current = current[p]; });
-    return current;
+    return path.reduce((acc, v) => acc[v], obj);
 }
 
 const withoutChildren = R.omit([ 'children' ]);
@@ -33,28 +27,43 @@ function getSignalHandlersFromProps(GObject, type, props) {
     )(props);
 }
 
-function addSignalHandlers(instance, set, unset) {
-    const disconnectFromInstance = (signalName) => {
-        if (typeof instance._connectedSignals[signalName] !== "undefined") {
+function updateSignalHandlers(instance, set, unset) {
+    /* eslint-disable no-param-reassign */
+    const disconnect = (signalName) => {
+        if (typeof instance._connectedSignals[signalName] !== 'undefined') {
             instance.disconnect(instance._connectedSignals[signalName]);
             delete instance._connectedSignals[signalName];
         }
     };
+    const connect = (signalName, fn) => {
+        instance._connectedSignals[signalName] = instance.connect(signalName, fn);
+    };
     instance._connectedSignals = instance._connectedSignals || {};
 
-
-    R.forEach(R.pipe(propNameToSignal, disconnectFromInstance), unset);
+    R.forEach(R.pipe(propNameToSignal, disconnect), unset);
     R.pipe(
         R.toPairs,
         R.forEach(([ name, fn ]) => {
             const signalName = propNameToSignal(name);
-            disconnectFromInstance(signalName);
-            instance._connectedSignals[signalName] = instance.connect(signalName, fn);
+            disconnect(signalName);
+            connect(signalName, fn);
         })
     )(set);
+    /* eslint-enable no-param-reassign */
 }
 
-module.exports = function (imports) {
+function updateProperties(instance, set, unset) {
+    /* eslint-disable no-param-reassign */
+    R.forEach(([ property, value ]) => {
+        instance[property] = value;
+    }, set);
+    R.forEach((property) => {
+        instance[property] = null;
+    }, unset);
+    /* eslint-enable no-param-reassign */
+}
+
+module.exports = function (imports, log) {
     const Gtk = imports.gi.Gtk;
     const GObject = imports.gi.GObject;
 
@@ -76,7 +85,7 @@ module.exports = function (imports) {
             )(props);
             const instance = new Type(appliedProps);
 
-            addSignalHandlers(instance, R.pick(signalHandlers, props), []);
+            updateSignalHandlers(instance, R.pick(signalHandlers, props), []);
 
             return instance;
         },
@@ -92,7 +101,6 @@ module.exports = function (imports) {
                 parentInstance.add(child);
             }
         },
-
 
         appendChild(parentInstance, child) {
             log('appendChild', parentInstance, child);
@@ -162,14 +170,8 @@ module.exports = function (imports) {
             )(changes.set);
             const signalHandlersToUnset = R.filter(isValidHandler, changes.unset);
 
-            addSignalHandlers(instance, signalHandlersToSet, signalHandlersToUnset);
-
-            R.forEach(([ property, value ]) => {
-                instance[property] = value;
-            }, changes.set);
-            R.forEach((property) => {
-                instance[property] = null;
-            }, changes.unset);
+            updateSignalHandlers(instance, signalHandlersToSet, signalHandlersToUnset);
+            updateProperties(instance, changes.set, changes.unset);
         },
 
         // commitMount is called after initializeFinalChildren *if*
@@ -223,7 +225,7 @@ module.exports = function (imports) {
 
         shouldSetTextContent(props) {
             // log('shouldSetTextContent');
-            return false
+            return false;
         },
 
         resetTextContent(instance) {
@@ -258,7 +260,7 @@ module.exports = function (imports) {
             log('scheduleDeferredCallback');
         },
 
-        useSyncScheduling: true,
+        useSyncScheduling: true
     };
 
     return GtkReconciler;

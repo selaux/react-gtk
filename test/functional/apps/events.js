@@ -6,7 +6,7 @@ const Gtk = imports.gi.Gtk;
 const Application = Gtk.Application;
 
 const MyApp = React.createClass({
-    getInitialState () {
+    getInitialState() {
         return { disableEvent: false, value: 0, increment: 1 };
     },
 
@@ -31,7 +31,7 @@ const MyApp = React.createClass({
 
         return h('Gtk.ApplicationWindow', { title: 'react-gtk events test', defaultWidth: 200, defaultHeight: 100 },
             h('Gtk.VBox', {}, [
-                h('Gtk.Label',  { key: 0, label: valueLabel }),
+                h('Gtk.Label', { key: 0, label: valueLabel }),
                 h('Gtk.Button', buttonProps),
                 h('Gtk.Button', { key: 2, label: 'Increase Increment', onClicked: this.increaseIncrement }),
                 h('Gtk.Button', { key: 3, label: buttonLabel, onClicked: this.toggleEvent })
