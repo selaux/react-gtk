@@ -3,7 +3,8 @@ const webpack = require('webpack');
 
 module.exports = {
     entry: {
-        events: path.resolve(__dirname, 'apps/events.js')
+        events: path.resolve(__dirname, 'apps/events.js'),
+        inputs: path.resolve(__dirname, 'apps/inputs.js')
     },
     module: {
         rules: [
