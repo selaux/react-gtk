@@ -29,7 +29,7 @@ const MyApp = React.createClass({
         const buttonBaseProps = { key: 1, label: 'Increase' };
         const buttonProps = onClicked ? Object.assign(buttonBaseProps, { onClicked }) : buttonBaseProps;
 
-        return h('GtkApplicationWindow', { title: 'react-gtk events test', defaultWidth: 200, defaultHeight: 100 },
+        return h('GtkWindow', { title: 'react-gtk events test', defaultWidth: 200, defaultHeight: 100 },
             h('GtkVBox', {}, [
                 h('GtkLabel', { key: 0, label: valueLabel }),
                 h('GtkButton', buttonProps),

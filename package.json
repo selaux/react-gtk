@@ -7,7 +7,7 @@
     "start": "webpack --config example/webpack.config.js && gjs example/dist/app.js",
     "test": "npm run lint && nyc npm run test:unit && npm run test:functional",
     "lint": "eslint .",
-    "test:unit": "mocha test/unit/**/*.js",
+    "test:unit": "mocha 'test/unit/**/*.js'",
     "build:functional": "webpack --config test/functional/webpack.config.js",
     "test:functional": "npm run build:functional && nix-build test/functional -A test"
   },
@@ -25,6 +25,9 @@
     "react-dom": "16.0.0-alpha.3"
   },
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
     "chai": "^4.1.2",
     "eslint": "^4.7.0",
     "eslint-config-holidaycheck": "^0.12.1",
@@ -39,25 +42,38 @@
       "node": true
     },
     "rules": {
-      "max-params": [ "error", 6 ],
+      "max-params": [
+        "error",
+        6
+      ],
       "no-process-env": 0
     },
     "overrides": [
       {
-        "files": ["test/functional/**/*.js", "example/**/*.js", "src/index.js"],
+        "files": [
+          "test/functional/**/*.js",
+          "example/**/*.js",
+          "src/index.js"
+        ],
         "globals": {
           "imports": false,
           "print": false
         }
       },
       {
-        "files": ["test/unit/**/*.js", "example/**/*.js"],
+        "files": [
+          "test/unit/**/*.js"
+        ],
         "env": {
           "mocha": true
         },
         "rules": {
           "camelcase": 0,
-          "max-statements": [ "error", 15 ]
+          "no-new": 0,
+          "max-statements": [
+            "error",
+            15
+          ]
         }
       }
     ]

@@ -1,71 +1,13 @@
 /* eslint no-unused-vars: 0 */
 
 const R = require('ramda');
-const kebabCase = require('just-kebab-case');
-const camelCase = require('just-camel-case');
-
-function getConstructor(type, gi) {
-    return gi.Gtk[type.slice(3)];
-}
 
 const withoutChildren = R.omit([ 'children' ]);
+
 const stringify = JSON.stringify;
 
-function propNameToSignal(handlerName) {
-    return kebabCase(handlerName.slice(2));
-}
-
-function isSignalHandler(GObject, type, propName) {
-    return GObject.signal_lookup(propNameToSignal(propName), type) !== 0;
-}
-
-function getSignalHandlersFromProps(GObject, type, props) {
-    return R.pipe(
-        R.keys,
-        R.filter(R.startsWith('on')),
-        R.filter(R.partial(isSignalHandler, [ GObject, type ]))
-    )(props);
-}
-
-function updateSignalHandlers(instance, set, unset) {
-    /* eslint-disable no-param-reassign */
-    const disconnect = (signalName) => {
-        if (typeof instance._connectedSignals[signalName] !== 'undefined') {
-            instance.disconnect(instance._connectedSignals[signalName]);
-            delete instance._connectedSignals[signalName];
-        }
-    };
-    const connect = (signalName, fn) => {
-        instance._connectedSignals[signalName] = instance.connect(signalName, fn);
-    };
-    instance._connectedSignals = instance._connectedSignals || {};
-
-    R.forEach(R.pipe(propNameToSignal, disconnect), unset);
-    R.pipe(
-        R.toPairs,
-        R.forEach(([ name, fn ]) => {
-            const signalName = propNameToSignal(name);
-            disconnect(signalName);
-            connect(signalName, fn);
-        })
-    )(set);
-    /* eslint-enable no-param-reassign */
-}
-
-function updateProperties(instance, set, unset) {
-    /* eslint-disable no-param-reassign */
-    R.forEach(([ property, value ]) => {
-        instance[property] = value;
-    }, set);
-    R.forEach((property) => {
-        instance[property] = null;
-    }, unset);
-    /* eslint-enable no-param-reassign */
-}
-
-module.exports = function (imports, log) {
+module.exports = function (imports, publicComponents, log) {
     const Gtk = imports.gi.Gtk;
-    const GObject = imports.gi.GObject;
 
     const GtkReconciler = {
         // the tree creation and updating methods. If you’re familiar with the DOM API
@@ -73,20 +15,8 @@ module.exports = function (imports, log) {
 
         createInstance(type, props, rootContainerInstance, hostContext, internalInstanceHandle) {
             log('createInstance', type, props);
-
-            const Type = getConstructor(type, imports.gi);
-            const signalHandlers = getSignalHandlersFromProps(GObject, Type, props);
-
-            const appliedProps = R.pipe(
-                R.omit(signalHandlers),
-                withoutChildren,
-                R.when(R.always(type === 'GtkApplicationWindow'), R.assoc('application', rootContainerInstance))
-            )(props);
-            const instance = new Type(appliedProps);
-
-            updateSignalHandlers(instance, R.pick(signalHandlers, props), []);
-
-            return instance;
+            const Type = publicComponents[type];
+            return new Type(props, rootContainerInstance, hostContext, internalInstanceHandle);
         },
 
         // this is called instead of `appendChild` when the parentInstance is first
@@ -94,26 +24,25 @@ module.exports = function (imports, log) {
         // added in https://github.com/facebook/react/pull/8400/
         appendInitialChild(parentInstance, child) {
             log('appendInitialChild', parentInstance, child);
-            child.show_all();
+            child.instance.show();
 
-            if (R.is(Gtk.Container, parentInstance)) {
-                parentInstance.add(child);
+            if (!R.is(Gtk.Application, parentInstance)) {
+                parentInstance.appendChild(child);
             }
         },
 
         appendChild(parentInstance, child) {
             log('appendChild', parentInstance, child);
-            child.show_all();
-
-            if (R.is(Gtk.Container, parentInstance)) {
-                parentInstance.add(child);
+            child.instance.show();
+            if (!R.is(Gtk.Application, parentInstance)) {
+                parentInstance.appendChild(child);
             }
         },
 
         removeChild(parentInstance, child) {
             log('removeChild', parentInstance, child);
-            if (R.is(Gtk.Container, parentInstance)) {
-                parentInstance.remove(child);
+            if (!R.is(Gtk.Application, parentInstance)) {
+                parentInstance.removeChild(child);
             }
         },
 
@@ -162,15 +91,7 @@ module.exports = function (imports, log) {
             internalInstanceHandle
         ) {
             log('commitUpdate', stringify(changes));
-            const isValidHandler = R.partial(isSignalHandler, [ GObject, instance ]);
-            const signalHandlersToSet = R.pipe(
-                R.filter(R.pipe(R.head, isValidHandler)),
-                R.fromPairs
-            )(changes.set);
-            const signalHandlersToUnset = R.filter(isValidHandler, changes.unset);
-
-            updateSignalHandlers(instance, signalHandlersToSet, signalHandlersToUnset);
-            updateProperties(instance, changes.set, changes.unset);
+            instance.update(changes);
         },
 
         // commitMount is called after initializeFinalChildren *if*
