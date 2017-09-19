@@ -1,10 +1,10 @@
 let
     host_pkgs = import <nixpkgs> {};
     src = host_pkgs.fetchFromGitHub {
-        owner = "NixOS";
-        repo = "nixpkgs-channels";
-        rev = "799435b7cab97a39893a104999b3bc589e1172b1";
-        sha256 = "1x61hpkagydrf05y0sa1ynmi8z3sm2377f4f6yiqlj9yvkg57jv3";
+        owner = "fstoerkle";
+        repo = "nixpkgs";
+        rev = "24d379690190409ea0e9bcfa8141315b278fb305";
+        sha256 = "12kgpnqkkx2bzv93zxnyhya7z6mnbiyr0qlwc08rdz53zhpd8hi0";
     };
 in
 {
