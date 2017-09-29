@@ -19,7 +19,9 @@ const InputsApp = React.createClass({
     },
 
     onToggleButton(btn) {
-        this.setState({ toggleButtonActive: this.state.fixedValues ? false : btn.get_active() });
+        if (!this.state.fixedValues) {
+            this.setState({ toggleButtonActive: btn.get_active() });
+        }
     },
 
     setToggleButtonActive() {
@@ -27,7 +29,9 @@ const InputsApp = React.createClass({
     },
 
     onSwitch(sw, active) {
-        this.setState({ switchActive: this.state.fixedValues ? false : active });
+        if (!this.state.fixedValues) {
+            this.setState({ switchActive: active });
+        }
     },
 
     setSwitchActive() {
@@ -35,7 +39,9 @@ const InputsApp = React.createClass({
     },
 
     onScale(scale) {
-        this.setState({ scaleValue: this.state.fixedValues ? -3 : scale.get_value() });
+        if (!this.state.fixedValues) {
+            this.setState({ scaleValue: scale.get_value() });
+        }
     },
 
     setScaleValue() {
@@ -43,7 +49,9 @@ const InputsApp = React.createClass({
     },
 
     onEntry(entry) {
-        this.setState({ entryText: entry.get_text() });
+        if (!this.state.fixedValues) {
+            this.setState({ entryText: entry.get_text() });
+        }
     },
 
     setEntryText() {
@@ -51,7 +59,9 @@ const InputsApp = React.createClass({
     },
 
     onSpinButton(sb) {
-        this.setState({ spinbuttonValue: this.state.fixedValues ? -3 : sb.get_value() });
+        if (!this.state.fixedValues) {
+            this.setState({ spinbuttonValue: sb.get_value() });
+        }
     },
 
     setSpinButtonValue() {
