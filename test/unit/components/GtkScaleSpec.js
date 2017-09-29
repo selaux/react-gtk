@@ -7,6 +7,7 @@ describe('GtkScale', function () {
     const getDefaultImports = () => ({
         gi: {
             Gtk: {
+                Adjustment: sinon.stub(),
                 Scale: sinon.stub()
             }
         }

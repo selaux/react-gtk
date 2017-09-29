@@ -1,5 +1,6 @@
 const R = require('ramda');
 const kebabCase = require('just-kebab-case');
+const updateProperties = require('../lib/updateProperties');
 
 const withoutChildren = R.omit([ 'children' ]);
 
@@ -41,17 +42,6 @@ function updateSignalHandlers(instance, set, unset) {
             connect(signalName, fn);
         })
     )(set);
-    /* eslint-enable no-param-reassign */
-}
-
-function updateProperties(instance, set, unset) {
-    /* eslint-disable no-param-reassign */
-    R.forEach(([ property, value ]) => {
-        instance[property] = value;
-    }, set);
-    R.forEach((property) => {
-        instance[property] = null;
-    }, unset);
     /* eslint-enable no-param-reassign */
 }
 
