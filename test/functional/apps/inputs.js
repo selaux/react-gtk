@@ -4,11 +4,19 @@ const h = React.createElement;
 
 const InputsApp = React.createClass({
     getInitialState() {
-        return { toggleButtonActive: false, switchActive: false };
+        return {
+            fixedValues: false,
+            toggleButtonActive: false,
+            switchActive: false
+        };
+    },
+
+    toggleFixedValues() {
+        this.setState({ fixedValues: !this.state.fixedValues });
     },
 
     onToggleButtonActive(btn) {
-        this.setState({ toggleButtonActive: btn.get_active() });
+        this.setState({ toggleButtonActive: this.state.fixedValues ? false : btn.get_active() });
     },
 
     setToggleButtonActive() {
@@ -16,7 +24,7 @@ const InputsApp = React.createClass({
     },
 
     onSwitchSwitched(sw, active) {
-        this.setState({ switchActive: active });
+        this.setState({ switchActive: this.state.fixedValues ? false : active });
     },
 
     setSwitchActive() {
@@ -26,6 +34,7 @@ const InputsApp = React.createClass({
     render() {
         return h('GtkWindow', { title: 'react-gtk inputs test', defaultWidth: 200, defaultHeight: 100 },
             h('GtkVBox', {}, [
+                h('GtkButton', { label: 'Fix Values', onClicked: this.toggleFixedValues }),
                 h('GtkHBox', { key: 0 }, [
                     h('GtkToggleButton', { label: 'Toggle me', onToggled: this.onToggleButtonActive, active: this.state.toggleButtonActive }),
                     h('GtkButton', { label: 'Set To Active', onClicked: this.setToggleButtonActive })
