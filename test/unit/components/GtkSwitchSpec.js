@@ -95,29 +95,6 @@ describe('GtkSwitch', function () {
             expect(gotInstance.instance.set_active.firstCall.args[0]).to.equal(false);
         });
 
-        it('should reset the value on the input after an update', function () {
-            const imports = getDefaultImports();
-            const GtkSwitch = injectGtkSwitch(imports, logStub);
-
-            const instance = { connect: sinon.stub(), get_active: sinon.stub().returns(true), set_active: sinon.stub() };
-            imports.gi.Gtk.Switch.returns(instance);
-            imports.gi.GObject.signal_lookup.returns(1);
-
-            const onToggledFirst = sinon.stub();
-            const onToggledSecond = sinon.stub();
-
-            const gotInstance = new GtkSwitch({ active: false, onToggled: onToggledFirst });
-            gotInstance.update({ set: [[ "onToggled", onToggledSecond ]], unset: [] });
-
-            expect(gotInstance.instance.connect.callCount).to.equal(2);
-            gotInstance.instance.connect.secondCall.args[1](instance);
-
-            expect(onToggledFirst.callCount).to.equal(0);
-            expect(onToggledSecond.callCount).to.equal(1);
-            expect(gotInstance.instance.set_active.callCount).to.equal(1);
-            expect(gotInstance.instance.set_active.firstCall.args[0]).to.equal(false);
-        });
-
         it('should disable the toggled event during an update', function () {
             const imports = getDefaultImports();
             const GtkSwitch = injectGtkSwitch(imports, logStub);

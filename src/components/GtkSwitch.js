@@ -8,7 +8,6 @@ function wrapOnToggled(instance, onToggled) {
 
         if (instance.isControlled()) {
             btn.set_active(instance.appliedActive);
-            btn.set_state(instance.appliedActive);
         }
 
         return true;

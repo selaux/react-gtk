@@ -9,6 +9,12 @@ describe('GtkVScale', function () {
             Gtk: {
                 Adjustment: sinon.stub(),
                 VScale: sinon.stub()
+            },
+            GObject: {
+                signal_lookup: sinon.stub().returns(0),
+                signal_handler_block: sinon.stub(),
+                signal_handler_unblock: sinon.stub(),
+                signal_handler_is_connected: sinon.stub()
             }
         }
 

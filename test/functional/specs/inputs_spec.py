@@ -2,6 +2,7 @@
 
 import unittest
 import dogtail.predicate as predicate
+import dogtail.rawinput as rawinput
 from common import TestCase
 
 def find_switch(app):
@@ -51,6 +52,34 @@ class TestInputsApp(TestCase):
         switch.click()
 
         self.assertDump('switch_fixed', self.app)
+
+    def test_scale_moved(self):
+        scale = self.app.findChild(predicate.GenericPredicate(roleName='slider'))
+        scale.grabFocus()
+        rawinput.pressKey('Right')
+        rawinput.pressKey('Right')
+        rawinput.pressKey('Right')
+
+
+        self.assertDump('scale_moved', self.app)
+
+    def test_scale_external_toggle(self):
+        activateButton = self.app.childNamed('Set Scale')
+        activateButton.click()
+
+        self.assertDump('scale_external_toggle', self.app)
+
+    def test_scale_fixed(self):
+        fixButton = self.app.childNamed('Fix Values')
+        fixButton.click()
+
+        scale = self.app.findChild(predicate.GenericPredicate(roleName='slider'))
+        scale.grabFocus()
+        rawinput.pressKey('Right')
+        rawinput.pressKey('Right')
+        rawinput.pressKey('Right')
+
+        self.assertDump('scale_fixed', self.app)
 
 if __name__ == '__main__':
     unittest.main()
