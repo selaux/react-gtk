@@ -27,7 +27,10 @@ def dump_state(buffer, node, depth):
     buffer.write(str(SPACER * depth) + '[states | ' + str.join(' | ', states) + str(']\n'))
 
 def do_dump(buffer, item, depth):
-    buffer.write(str(SPACER * depth) + str(item) + str('\n'))
+    buffer.write(str(SPACER * depth) + str(item))
+    if hasattr(item, "value") and item.value is not None:
+        buffer.write('[' + str(item.value) + ']')
+    buffer.write('\n')
 
 def crawl(buffer, node, depth):
     do_dump(buffer, node, depth)
