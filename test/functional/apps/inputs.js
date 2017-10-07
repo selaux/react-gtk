@@ -85,7 +85,10 @@ const InputsApp = React.createClass({
                     h('GtkButton', { label: 'Activate Toggle', onClicked: this.setToggleButtonActive })
                 ]),
                 h('GtkHBox', { key: 1 }, [
-                    h('GtkSwitch', { active: this.state.switchActive, onStateSet: this.onSwitch }),
+                    h('GtkSwitch', {
+                        active: this.state.switchActive,
+                        onToggled: this.onSwitch
+                    }),
                     h('GtkLabel', { label: this.state.switchActive.toString() }),
                     h('GtkButton', { label: 'Activate Switch', onClicked: this.setSwitchActive })
                 ]),

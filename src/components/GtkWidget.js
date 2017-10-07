@@ -5,11 +5,11 @@ const updateProperties = require('../lib/updateProperties');
 const withoutChildren = R.omit([ 'children' ]);
 
 function propNameToSignal(handlerName) {
-    return kebabCase(handlerName.slice(2));
+    return handlerName.slice(2).split('::').map(kebabCase).join('::');
 }
 
 function isSignalHandler(GObject, type, propName) {
-    return R.startsWith('on', propName) && GObject.signal_lookup(propNameToSignal(propName), type) !== 0;
+    return R.startsWith('on', propName) && GObject.signal_lookup(propNameToSignal(propName).split('::')[0], type) !== 0;
 }
 
 function getSignalHandlersFromProps(GObject, type, props) {
