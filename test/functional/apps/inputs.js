@@ -18,9 +18,9 @@ const InputsApp = React.createClass({
         this.setState({ fixedValues: !this.state.fixedValues });
     },
 
-    onToggleButton(btn) {
+    onToggleButton(btn, toggled) {
         if (!this.state.fixedValues) {
-            this.setState({ toggleButtonActive: btn.get_active() });
+            this.setState({ toggleButtonActive: toggled });
         }
     },
 
@@ -38,9 +38,9 @@ const InputsApp = React.createClass({
         this.setState({ switchActive: true });
     },
 
-    onScale(scale) {
+    onScale(scale, value) {
         if (!this.state.fixedValues) {
-            this.setState({ scaleValue: scale.get_value() });
+            this.setState({ scaleValue: value });
         }
     },
 
@@ -71,10 +71,13 @@ const InputsApp = React.createClass({
     render() {
         return h('GtkWindow', { title: 'react-gtk inputs test', defaultWidth: 200, defaultHeight: 100 },
             h('GtkVBox', {}, [
-                h('GtkButton', { label: 'Fix Values', onClicked: this.toggleFixedValues }),
+                h('GtkButton', {
+                    label: this.state.fixedValues ? 'Unfix Values' : 'Fix Values',
+                    onClicked: this.toggleFixedValues
+                }),
                 h('GtkHBox', { key: 0 }, [
                     h('GtkToggleButton', {
-                        label: 'Toggle me',
+                        label: 'Toggle Me',
                         onToggled: this.onToggleButton,
                         active: this.state.toggleButtonActive
                     }),

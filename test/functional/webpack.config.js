@@ -24,7 +24,7 @@ module.exports = {
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: process.env.NODE_ENV,
-                DEBUG_REACT_GTK: '1'
+                DEBUG_REACT_GTK: '0'
             }
         })
     ],

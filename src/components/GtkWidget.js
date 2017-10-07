@@ -9,13 +9,12 @@ function propNameToSignal(handlerName) {
 }
 
 function isSignalHandler(GObject, type, propName) {
-    return GObject.signal_lookup(propNameToSignal(propName), type) !== 0;
+    return R.startsWith('on', propName) && GObject.signal_lookup(propNameToSignal(propName), type) !== 0;
 }
 
 function getSignalHandlersFromProps(GObject, type, props) {
     return R.pipe(
         R.keys,
-        R.filter(R.startsWith('on')),
         R.filter(R.partial(isSignalHandler, [ GObject, type ]))
     )(props);
 }
