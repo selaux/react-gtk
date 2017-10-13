@@ -30,6 +30,8 @@ def do_dump(buffer, item, depth):
     buffer.write(str(SPACER * depth) + str(item))
     if hasattr(item, "value") and item.value is not None:
         buffer.write('[' + str(item.value) + ']')
+    if hasattr(item, "text") and item.text is not None:
+        buffer.write('[' + str(item.text) + ']')
     buffer.write('\n')
 
 def crawl(buffer, node, depth):
