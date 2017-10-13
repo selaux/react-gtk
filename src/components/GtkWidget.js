@@ -1,20 +1,20 @@
 const R = require('ramda');
 const kebabCase = require('just-kebab-case');
+const updateProperties = require('../lib/updateProperties');
 
 const withoutChildren = R.omit([ 'children' ]);
 
 function propNameToSignal(handlerName) {
-    return kebabCase(handlerName.slice(2));
+    return handlerName.slice(2).split('::').map(kebabCase).join('::');
 }
 
 function isSignalHandler(GObject, type, propName) {
-    return GObject.signal_lookup(propNameToSignal(propName), type) !== 0;
+    return R.startsWith('on', propName) && GObject.signal_lookup(propNameToSignal(propName).split('::')[0], type) !== 0;
 }
 
 function getSignalHandlersFromProps(GObject, type, props) {
     return R.pipe(
         R.keys,
-        R.filter(R.startsWith('on')),
         R.filter(R.partial(isSignalHandler, [ GObject, type ]))
     )(props);
 }
@@ -41,17 +41,6 @@ function updateSignalHandlers(instance, set, unset) {
             connect(signalName, fn);
         })
     )(set);
-    /* eslint-enable no-param-reassign */
-}
-
-function updateProperties(instance, set, unset) {
-    /* eslint-disable no-param-reassign */
-    R.forEach(([ property, value ]) => {
-        instance[property] = value;
-    }, set);
-    R.forEach((property) => {
-        instance[property] = null;
-    }, unset);
     /* eslint-enable no-param-reassign */
 }
 

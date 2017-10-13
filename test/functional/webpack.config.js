@@ -3,7 +3,8 @@ const webpack = require('webpack');
 
 module.exports = {
     entry: {
-        events: path.resolve(__dirname, 'apps/events.js')
+        events: path.resolve(__dirname, 'apps/events.js'),
+        inputs: path.resolve(__dirname, 'apps/inputs.js')
     },
     module: {
         rules: [
@@ -23,7 +24,7 @@ module.exports = {
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: process.env.NODE_ENV,
-                DEBUG_REACT_GTK: '1'
+                DEBUG_REACT_GTK: '0'
             }
         })
     ],

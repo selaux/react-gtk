@@ -1,0 +1,25 @@
+<frame showing="true" sensitive="true">
+  <filler showing="true" sensitive="true">
+    <pushbutton focusable="true" showing="true" sensitive="true"/>
+    <filler showing="true" sensitive="true">
+      <togglebutton focusable="true" showing="true" sensitive="true"/>
+      <label showing="true" sensitive="true" text="false"/>
+      <pushbutton focusable="true" showing="true" sensitive="true"/>
+    </filler>
+    <filler showing="true" sensitive="true">
+      <togglebutton focusable="true" showing="true" sensitive="true"/>
+      <label showing="true" sensitive="true" text="false"/>
+      <pushbutton focusable="true" showing="true" sensitive="true"/>
+    </filler>
+    <filler showing="true" sensitive="true">
+      <slider focusable="true" showing="true" sensitive="true" value="0.0"/>
+      <label showing="true" sensitive="true" text="0"/>
+      <pushbutton focusable="true" showing="true" sensitive="true"/>
+    </filler>
+    <filler showing="true" sensitive="true">
+      <text caretOffset="10" focusable="true" focused="true" showing="true" sensitive="true" text="Typed Text"/>
+      <label showing="true" sensitive="true" text="Typed Text"/>
+      <pushbutton focusable="true" showing="true" sensitive="true"/>
+    </filler>
+  </filler>
+</frame>

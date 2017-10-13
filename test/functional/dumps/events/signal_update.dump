@@ -1,9 +1,8 @@
-[frame | react-gtk events test]
- [filler | ]
-  [label | Value: 4]
-  [push button | Increase]
-   [action | click |  ]
-  [push button | Increase Increment]
-   [action | click |  ]
-  [push button | Disable Event]
-   [action | click |  ]
+<frame showing="true" sensitive="true">
+  <filler showing="true" sensitive="true">
+    <label showing="true" sensitive="true" text="Value: 4"/>
+    <pushbutton focusable="true" focused="true" showing="true" sensitive="true"/>
+    <pushbutton focusable="true" showing="true" sensitive="true"/>
+    <pushbutton focusable="true" showing="true" sensitive="true"/>
+  </filler>
+</frame>

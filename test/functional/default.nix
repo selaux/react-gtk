@@ -39,16 +39,19 @@ let
 
             cp -R ./dumps $out
 
-            substituteInPlace $out/bin/* --replace "test-output/functional" "$out/bundles"
-            substituteInPlace $out/bin/* --replace "test/functional/dumps" "$out/dumps"
-            substituteInPlace $out/bin/* --replace "/usr/bin/gjs" "${gnome3.gjs}/bin/gjs"
+            substituteInPlace $out/bin/common.py --replace "test-output/functional" "$out/bundles"
+            substituteInPlace $out/bin/common.py --replace "test/functional/dumps" "$out/dumps"
+            substituteInPlace $out/bin/common.py --replace "/usr/bin/gjs" "${gnome3.gjs}/bin/gjs"
 
             wrapPythonPrograms
 
-            wrapProgram $out/bin/*.py \
-                --set GI_TYPELIB_PATH "$GI_TYPELIB_PATH" \
-                --set XDG_DATA_DIRS "${gnome3.gsettings_desktop_schemas}/share/gsettings-schemas/gsettings-desktop-schemas-3.24.0/" \
-                --set GTK_MODULES "gail:atk-bridge"
+            for i in $out/bin/*_spec.py; do
+                wrapProgram $i \
+                    --set GI_TYPELIB_PATH "$GI_TYPELIB_PATH" \
+                    --set XDG_DATA_DIRS "${gnome3.gsettings_desktop_schemas}/share/gsettings-schemas/gsettings-desktop-schemas-3.24.0/" \
+                    --set GTK_MODULES "gail:atk-bridge";
+            done;
+
         '';
     };
 in
@@ -84,6 +87,7 @@ in
 
           my $out = './test-output';
           $machine->succeed("su - alice -c 'DISPLAY=:0.0 OUT=$out ${testCases}/bin/events_spec.py'");
+          $machine->succeed("su - alice -c 'DISPLAY=:0.0 OUT=$out ${testCases}/bin/inputs_spec.py'");
 
           $machine->screenshot("screen");
         '';

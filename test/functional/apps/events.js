@@ -1,11 +1,8 @@
-const ReactGtk = require('../../../src');
+const runApp = require('./runApp');
 const React = require('react');
 const h = React.createElement;
 
-const Gtk = imports.gi.Gtk;
-const Application = Gtk.Application;
-
-const MyApp = React.createClass({
+const EventsApp = React.createClass({
     getInitialState() {
         return { disableEvent: false, value: 0, increment: 1 };
     },
@@ -39,11 +36,4 @@ const MyApp = React.createClass({
     }
 });
 
-Gtk.init(null);
-
-const app = new Application();
-
-app.connect('activate', () => {
-    ReactGtk.render(h(MyApp), app);
-});
-app.run([]);
+runApp(EventsApp);
