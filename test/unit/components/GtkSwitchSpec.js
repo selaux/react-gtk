@@ -103,7 +103,7 @@ describe('GtkSwitch', function () {
             imports.gi.Gtk.Switch.returns(instance);
             imports.gi.GObject.signal_lookup.returns(1);
 
-            const gotInstance = new GtkSwitch({ active: false, onToggled: sinon.stub() });
+            const gotInstance = new GtkSwitch({ active: false });
             gotInstance.update({ set: [ [ 'active', true ] ], unset: [] });
 
             expect(imports.gi.GObject.signal_handler_block.callCount).to.equal(1);
@@ -121,7 +121,7 @@ describe('GtkSwitch', function () {
 
             imports.gi.GObject.signal_handler_is_connected.withArgs(instance, 123).returns(true);
 
-            const gotInstance = new GtkSwitch({ active: false, onToggled: sinon.stub() });
+            const gotInstance = new GtkSwitch({ active: false });
             gotInstance.update({ set: [ [ 'active', true ] ], unset: [] });
 
             expect(imports.gi.GObject.signal_handler_unblock.callCount).to.equal(1);

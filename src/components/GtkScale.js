@@ -25,7 +25,7 @@ module.exports = function (imports) {
         constructor(props, ...args) {
             const appliedProps = R.omit([ 'onValueChanged', 'value' ], props);
             const set = [
-                [ 'onValueChanged', props.onValueChanged ],
+                [ 'onValueChanged', props.onValueChanged || (() => {}) ],
                 [ 'value', props.value ]
             ].filter(([ , value ]) => typeof value !== 'undefined');
 

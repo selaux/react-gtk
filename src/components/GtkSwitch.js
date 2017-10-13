@@ -18,7 +18,6 @@ function wrapOnToggled(instance, onToggled) {
 
 module.exports = function (imports) {
     const GtkWidget = require('./GtkWidget')(imports);
-    const GObject = imports.gi.GObject;
 
     return class GtkSwitch extends GtkWidget {
         get InternalType() {
@@ -28,7 +27,7 @@ module.exports = function (imports) {
         constructor(props, ...args) {
             const appliedProps = R.omit([ 'onToggled', 'active' ], props);
             const set = [
-                [ 'onToggled', props.onToggled ],
+                [ 'onToggled', props.onToggled || (() => {}) ],
                 [ 'active', props.active ]
             ].filter(([ , value ]) => typeof value !== 'undefined');
 

@@ -122,7 +122,7 @@ describe('GtkEntry', function () {
             imports.gi.Gtk.Entry.returns(instance);
             imports.gi.GObject.signal_lookup.withArgs('changed').returns(1);
 
-            const gotInstance = new GtkEntry({ text: 'first text', onChanged: sinon.stub() });
+            const gotInstance = new GtkEntry({ text: 'first text' });
             gotInstance.update({ set: [ [ 'text', 'second text' ] ], unset: [] });
 
             expect(imports.gi.GObject.signal_handler_block.callCount).to.equal(1);
@@ -143,7 +143,7 @@ describe('GtkEntry', function () {
             imports.gi.GObject.signal_lookup.withArgs('changed').returns(1);
             imports.gi.GObject.signal_handler_is_connected.withArgs(instance, 123).returns(true);
 
-            const gotInstance = new GtkEntry({ text: 'test1', onChanged: sinon.stub() });
+            const gotInstance = new GtkEntry({ text: 'test1' });
             gotInstance.update({ set: [ [ 'text', 'test2' ] ], unset: [] });
 
             expect(imports.gi.GObject.signal_handler_unblock.callCount).to.equal(1);
