@@ -33,7 +33,9 @@ module.exports = function (imports) {
 
             this.isControlled = isControlled.bind(this);
             this.update = wrapUpdate(imports, {
+                controlledProp: 'text',
                 handler: 'onChanged',
+                signal: 'changed',
                 wrappingFn: wrapOnChanged
             }, this.update);
 
