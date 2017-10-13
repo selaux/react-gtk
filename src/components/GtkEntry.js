@@ -24,8 +24,8 @@ module.exports = function (imports) {
         constructor(props, ...args) {
             const appliedProps = R.omit([ 'onChanged', 'text' ], props);
             const set = [
-                [ "onChanged", props.onChanged ],
-                [ "text", props.text ]
+                [ 'onChanged', props.onChanged ],
+                [ 'text', props.text ]
             ].filter(([ prop, value ]) => typeof value !== 'undefined');
 
             super(appliedProps, ...args);
@@ -46,7 +46,7 @@ module.exports = function (imports) {
                 }
                 return [ prop, value ];
             });
-            const connectedToggleHandlerId = this.instance._connectedSignals['changed'];
+            const connectedToggleHandlerId = this.instance._connectedSignals.changed;
 
             if (connectedToggleHandlerId) {
                 GObject.signal_handler_block(this.instance, connectedToggleHandlerId);
@@ -60,7 +60,6 @@ module.exports = function (imports) {
             if (GObject.signal_handler_is_connected(this.instance, connectedToggleHandlerId)) {
                 GObject.signal_handler_unblock(this.instance, connectedToggleHandlerId);
             }
-
         }
     };
 };

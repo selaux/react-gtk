@@ -9,8 +9,7 @@ const InputsApp = React.createClass({
             toggleButtonActive: false,
             switchActive: false,
             scaleValue: 0,
-            entryText: 'My Text',
-            spinbuttonValue: 0
+            entryText: 'My Text'
         };
     },
 
@@ -58,16 +57,6 @@ const InputsApp = React.createClass({
         this.setState({ entryText: 'Set Text' });
     },
 
-    onSpinButton(sb) {
-        if (!this.state.fixedValues) {
-            this.setState({ spinbuttonValue: sb.get_value() });
-        }
-    },
-
-    setSpinButtonValue() {
-        this.setState({ spinbuttonValue: 3 });
-    },
-
     render() {
         return h('GtkWindow', { title: 'react-gtk inputs test', defaultWidth: 200, defaultHeight: 100 },
             h('GtkVBox', {}, [
@@ -108,17 +97,6 @@ const InputsApp = React.createClass({
                     h('GtkEntry', { text: this.state.entryText, onChanged: this.onEntry }),
                     h('GtkLabel', { label: this.state.entryText }),
                     h('GtkButton', { label: 'Set Entry', onClicked: this.setEntryText })
-                ]),
-                h('GtkHBox', { key: 4 }, [
-                    h('GtkSpinButton', {
-                        lower: -5,
-                        upper: 5,
-                        stepIncrement: 1,
-                        value: this.state.spinbuttonValue,
-                        onChanged: this.onSpinButton
-                    }),
-                    h('GtkLabel', { label: this.state.spinbuttonValue.toString() }),
-                    h('GtkButton', { label: 'Set Spin Button', onClicked: this.setSpinButtonValue })
                 ])
             ]));
     }

@@ -21,10 +21,5 @@
       <label showing="true" sensitive="true" text="My Text"/>
       <pushbutton focusable="true" showing="true" sensitive="true"/>
     </filler>
-    <filler showing="true" sensitive="true">
-      <spinbutton focusable="true" showing="true" sensitive="true" text="0" value="0.0"/>
-      <label showing="true" sensitive="true" text="0"/>
-      <pushbutton focusable="true" showing="true" sensitive="true"/>
-    </filler>
   </filler>
 </frame>

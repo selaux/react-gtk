@@ -13,7 +13,7 @@ describe('GtkToggleButton', function () {
                 signal_lookup: sinon.stub().returns(0),
                 signal_handler_block: sinon.stub(),
                 signal_handler_unblock: sinon.stub(),
-                signal_handler_is_connected: sinon.stub(),
+                signal_handler_is_connected: sinon.stub()
             }
         }
 
@@ -104,7 +104,7 @@ describe('GtkToggleButton', function () {
             imports.gi.GObject.signal_lookup.returns(1);
 
             const gotInstance = new GtkToggleButton({ active: false });
-            gotInstance.update({ set: [[ "active", true ]], unset: [] });
+            gotInstance.update({ set: [ [ 'active', true ] ], unset: [] });
 
             expect(imports.gi.GObject.signal_handler_block.callCount).to.equal(1);
             expect(imports.gi.GObject.signal_handler_block.firstCall.args[0]).to.equal(instance);
@@ -122,7 +122,7 @@ describe('GtkToggleButton', function () {
             imports.gi.GObject.signal_handler_is_connected.withArgs(instance, 123).returns(true);
 
             const gotInstance = new GtkToggleButton({ active: false });
-            gotInstance.update({ set: [[ "active", true ]], unset: [] });
+            gotInstance.update({ set: [ [ 'active', true ] ], unset: [] });
 
             expect(imports.gi.GObject.signal_handler_unblock.callCount).to.equal(1);
             expect(imports.gi.GObject.signal_handler_unblock.firstCall.args[0]).to.equal(instance);

@@ -13,7 +13,7 @@ describe('GtkEntry', function () {
                 signal_lookup: sinon.stub().returns(0),
                 signal_handler_block: sinon.stub(),
                 signal_handler_unblock: sinon.stub(),
-                signal_handler_is_connected: sinon.stub(),
+                signal_handler_is_connected: sinon.stub()
             }
         }
 
@@ -54,7 +54,7 @@ describe('GtkEntry', function () {
             const imports = getDefaultImports();
             const GtkEntry = injectGtkEntry(imports, logStub);
 
-            const instance = { connect: sinon.stub(), get_text: sinon.stub().returns("new text") };
+            const instance = { connect: sinon.stub(), get_text: sinon.stub().returns('new text') };
             imports.gi.Gtk.Entry.returns(instance);
             imports.gi.GObject.signal_lookup.withArgs('changed').returns(1);
 
@@ -67,7 +67,7 @@ describe('GtkEntry', function () {
 
             expect(onChanged.callCount).to.equal(1);
             expect(onChanged.firstCall.args[0]).to.equal(instance);
-            expect(onChanged.firstCall.args[1]).to.equal("new text");
+            expect(onChanged.firstCall.args[1]).to.equal('new text');
         });
     });
 
@@ -76,7 +76,7 @@ describe('GtkEntry', function () {
             const imports = getDefaultImports();
             const GtkEntry = injectGtkEntry(imports, logStub);
 
-            const instance = { connect: sinon.stub(), get_text: sinon.stub().returns("new text") };
+            const instance = { connect: sinon.stub(), get_text: sinon.stub().returns('new text') };
             imports.gi.Gtk.Entry.returns(instance);
             imports.gi.GObject.signal_lookup.withArgs('changed').returns(1);
 
@@ -89,25 +89,25 @@ describe('GtkEntry', function () {
 
             expect(onChanged.callCount).to.equal(1);
             expect(onChanged.firstCall.args[0]).to.equal(instance);
-            expect(onChanged.firstCall.args[1]).to.equal("new text");
+            expect(onChanged.firstCall.args[1]).to.equal('new text');
         });
 
         it('should reset the value to the old value after emitting', function () {
             const imports = getDefaultImports();
             const GtkEntry = injectGtkEntry(imports, logStub);
 
-            const instance = { connect: sinon.stub(), set_text: sinon.stub(), get_text: sinon.stub().returns("text") };
+            const instance = { connect: sinon.stub(), set_text: sinon.stub(), get_text: sinon.stub().returns('text') };
             imports.gi.Gtk.Entry.returns(instance);
             imports.gi.GObject.signal_lookup.withArgs('changed').returns(1);
 
             const onChanged = sinon.stub();
 
-            const gotInstance = new GtkEntry({ text: "aloha", onChanged });
+            const gotInstance = new GtkEntry({ text: 'aloha', onChanged });
 
             gotInstance.instance.connect.firstCall.args[1](instance);
 
             expect(instance.set_text.callCount).to.equal(1);
-            expect(instance.set_text.firstCall.args[0]).to.equal("aloha");
+            expect(instance.set_text.firstCall.args[0]).to.equal('aloha');
         });
 
         it('should disable the toggled event during an update', function () {
@@ -117,13 +117,13 @@ describe('GtkEntry', function () {
             const instance = {
                 connect: sinon.stub().withArgs('changed').returns(123),
                 set_text: sinon.stub(),
-                get_text: sinon.stub().returns("text")
+                get_text: sinon.stub().returns('text')
             };
             imports.gi.Gtk.Entry.returns(instance);
             imports.gi.GObject.signal_lookup.withArgs('changed').returns(1);
 
-            const gotInstance = new GtkEntry({ text: "first text", onChanged: sinon.stub() });
-            gotInstance.update({ set: [[ "text", "second text" ]], unset: [] });
+            const gotInstance = new GtkEntry({ text: 'first text', onChanged: sinon.stub() });
+            gotInstance.update({ set: [ [ 'text', 'second text' ] ], unset: [] });
 
             expect(imports.gi.GObject.signal_handler_block.callCount).to.equal(1);
             expect(imports.gi.GObject.signal_handler_block.firstCall.args[0]).to.equal(instance);
@@ -137,14 +137,14 @@ describe('GtkEntry', function () {
             const instance = {
                 connect: sinon.stub().withArgs('changed').returns(123),
                 set_text: sinon.stub(),
-                get_text: sinon.stub().returns("text")
+                get_text: sinon.stub().returns('text')
             };
             imports.gi.Gtk.Entry.returns(instance);
             imports.gi.GObject.signal_lookup.withArgs('changed').returns(1);
             imports.gi.GObject.signal_handler_is_connected.withArgs(instance, 123).returns(true);
 
-            const gotInstance = new GtkEntry({ text: "test1", onChanged: sinon.stub() });
-            gotInstance.update({ set: [[ "text", "test2" ]], unset: [] });
+            const gotInstance = new GtkEntry({ text: 'test1', onChanged: sinon.stub() });
+            gotInstance.update({ set: [ [ 'text', 'test2' ] ], unset: [] });
 
             expect(imports.gi.GObject.signal_handler_unblock.callCount).to.equal(1);
             expect(imports.gi.GObject.signal_handler_unblock.firstCall.args[0]).to.equal(instance);

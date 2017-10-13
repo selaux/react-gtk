@@ -14,7 +14,7 @@ describe('GtkScale', function () {
                 signal_lookup: sinon.stub().returns(0),
                 signal_handler_block: sinon.stub(),
                 signal_handler_unblock: sinon.stub(),
-                signal_handler_is_connected: sinon.stub(),
+                signal_handler_is_connected: sinon.stub()
             }
         }
 
@@ -105,7 +105,7 @@ describe('GtkScale', function () {
             imports.gi.GObject.signal_lookup.withArgs('value-changed').returns(1);
 
             const gotInstance = new GtkScale({ value: 1 });
-            gotInstance.update({ set: [[ "value", 2 ]], unset: [] });
+            gotInstance.update({ set: [ [ 'value', 2 ] ], unset: [] });
 
             expect(imports.gi.GObject.signal_handler_block.callCount).to.equal(1);
             expect(imports.gi.GObject.signal_handler_block.firstCall.args[0]).to.equal(instance);
@@ -122,7 +122,7 @@ describe('GtkScale', function () {
             imports.gi.GObject.signal_handler_is_connected.withArgs(instance, 123).returns(true);
 
             const gotInstance = new GtkScale({ value: 1 });
-            gotInstance.update({ set: [[ "value", 2 ]], unset: [] });
+            gotInstance.update({ set: [ [ 'value', 2 ] ], unset: [] });
 
             expect(imports.gi.GObject.signal_handler_unblock.callCount).to.equal(1);
             expect(imports.gi.GObject.signal_handler_unblock.firstCall.args[0]).to.equal(instance);

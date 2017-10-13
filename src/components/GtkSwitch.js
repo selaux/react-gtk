@@ -28,7 +28,7 @@ module.exports = function (imports) {
 
             super(appliedProps, ...args);
 
-            this.update({ set: [ [ "onToggled", props.onToggled ], [ "active", props.active ] ], unset: [] });
+            this.update({ set: [ [ 'onToggled', props.onToggled ], [ 'active', props.active ] ], unset: [] });
         }
 
         isControlled() {
@@ -40,7 +40,7 @@ module.exports = function (imports) {
             const active = set.find(([ prop ]) => prop === 'active');
             const appliedSet = set.map(([ prop, value ]) => {
                 if (prop === 'onToggled') {
-                    return [ 'onNotify::active', wrapOnToggled(this, value) ]
+                    return [ 'onNotify::active', wrapOnToggled(this, value) ];
                 }
                 return [ prop, value ];
             });
@@ -58,7 +58,6 @@ module.exports = function (imports) {
             if (GObject.signal_handler_is_connected(this.instance, connectedToggleHandlerId)) {
                 GObject.signal_handler_unblock(this.instance, connectedToggleHandlerId);
             }
-
         }
     };
 };

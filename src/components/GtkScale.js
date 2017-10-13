@@ -26,7 +26,7 @@ module.exports = function (imports) {
 
             super(appliedProps, ...args);
 
-            this.update({ set: [ [ "onValueChanged", props.onValueChanged ], [ "value", props.value ] ], unset: [] });
+            this.update({ set: [ [ 'onValueChanged', props.onValueChanged ], [ 'value', props.value ] ], unset: [] });
         }
 
         isControlled() {
@@ -56,7 +56,6 @@ module.exports = function (imports) {
             if (GObject.signal_handler_is_connected(this.instance, connectedToggleHandlerId)) {
                 GObject.signal_handler_unblock(this.instance, connectedToggleHandlerId);
             }
-
         }
     };
 };

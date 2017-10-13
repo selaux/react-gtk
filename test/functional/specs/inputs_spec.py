@@ -11,6 +11,9 @@ def find_switch(app):
 def find_text_entry(app):
     return app.findChildren(predicate.GenericPredicate(roleName='text'))[0]
 
+def find_spin_button(app):
+    return app.findChildren(predicate.GenericPredicate(roleName='spin button'))[0]
+
 class TestInputsApp(TestCase):
     name = "inputs"
 
