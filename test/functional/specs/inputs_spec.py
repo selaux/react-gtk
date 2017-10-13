@@ -8,6 +8,9 @@ from common import TestCase
 def find_switch(app):
     return app.findChildren(predicate.GenericPredicate(roleName='toggle button'))[1]
 
+def find_text_entry(app):
+    return app.findChildren(predicate.GenericPredicate(roleName='text'))[0]
+
 class TestInputsApp(TestCase):
     name = "inputs"
 
@@ -80,6 +83,27 @@ class TestInputsApp(TestCase):
         rawinput.pressKey('Right')
 
         self.assertDump('scale_fixed', self.app)
+
+    def test_entry_typed_into(self):
+        entry = find_text_entry(self.app)
+        entry.typeText('Typed Text')
+
+        self.assertDump('entry_typed_into', self.app)
+
+    def test_entry_external_toggle(self):
+        activateButton = self.app.childNamed('Set Entry')
+        activateButton.click()
+
+        self.assertDump('entry_external_toggle', self.app)
+
+    def test_entry_fixed(self):
+        fixButton = self.app.childNamed('Fix Values')
+        fixButton.click()
+
+        entry = find_text_entry(self.app)
+        entry.typeText('A')
+
+        self.assertDump('entry_fixed', self.app)
 
 if __name__ == '__main__':
     unittest.main()

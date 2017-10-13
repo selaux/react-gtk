@@ -1,0 +1,30 @@
+<frame showing="true" sensitive="true">
+  <filler showing="true" sensitive="true">
+    <pushbutton focusable="true" showing="true" sensitive="true"/>
+    <filler showing="true" sensitive="true">
+      <togglebutton focusable="true" showing="true" sensitive="true"/>
+      <label showing="true" sensitive="true" text="false"/>
+      <pushbutton focusable="true" showing="true" sensitive="true"/>
+    </filler>
+    <filler showing="true" sensitive="true">
+      <togglebutton focusable="true" showing="true" sensitive="true"/>
+      <label showing="true" sensitive="true" text="false"/>
+      <pushbutton focusable="true" showing="true" sensitive="true"/>
+    </filler>
+    <filler showing="true" sensitive="true">
+      <slider focusable="true" showing="true" sensitive="true" value="0.0"/>
+      <label showing="true" sensitive="true" text="0"/>
+      <pushbutton focusable="true" showing="true" sensitive="true"/>
+    </filler>
+    <filler showing="true" sensitive="true">
+      <text focusable="true" showing="true" sensitive="true" text="Set Text"/>
+      <label showing="true" sensitive="true" text="Set Text"/>
+      <pushbutton focusable="true" focused="true" showing="true" sensitive="true"/>
+    </filler>
+    <filler showing="true" sensitive="true">
+      <spinbutton focusable="true" showing="true" sensitive="true" text="0" value="0.0"/>
+      <label showing="true" sensitive="true" text="0"/>
+      <pushbutton focusable="true" showing="true" sensitive="true"/>
+    </filler>
+  </filler>
+</frame>
