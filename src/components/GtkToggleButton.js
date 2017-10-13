@@ -1,4 +1,6 @@
 const R = require('ramda');
+const isControlled = require('./controlled/isControlled');
+const wrapUpdate = require('./controlled/wrapUpdate');
 
 function wrapOnToggled(instance, onToggled) {
     return function wrappedOnToggled(btn) {
@@ -9,14 +11,13 @@ function wrapOnToggled(instance, onToggled) {
         }
 
         if (instance.isControlled()) {
-            btn.set_active(instance.appliedActive);
+            btn.set_active(instance.value);
         }
     };
 }
 
 module.exports = function (imports) {
     const GtkButton = require('./GtkButton')(imports);
-    const GObject = imports.gi.GObject;
 
     return class GtkToggleButton extends GtkButton {
         get InternalType() {
@@ -25,39 +26,22 @@ module.exports = function (imports) {
 
         constructor(props, ...args) {
             const appliedProps = R.omit([ 'onToggled', 'active' ], props);
+            const set = [
+                [ 'onToggled', props.onToggled || (() => {}) ],
+                [ 'active', props.active ]
+            ].filter(([ , value ]) => typeof value !== 'undefined');
 
             super(appliedProps, ...args);
 
-            this.update({ set: [ [ 'onToggled', props.onToggled ], [ 'active', props.active ] ], unset: [] });
-        }
+            this.isControlled = isControlled.bind(this);
+            this.update = wrapUpdate(imports, {
+                controlledProp: 'active',
+                handler: 'onToggled',
+                signal: 'toggled',
+                wrappingFn: wrapOnToggled
+            }, this.update);
 
-        isControlled() {
-            return typeof this.appliedActive !== 'undefined';
-        }
-
-        update(changes) {
-            const { set, unset } = changes;
-            const active = set.find(([ prop ]) => prop === 'active');
-            const appliedSet = set.map(([ prop, value ]) => {
-                if (prop === 'onToggled') {
-                    return [ prop, wrapOnToggled(this, value) ];
-                }
-                return [ prop, value ];
-            });
-            const connectedToggleHandlerId = this.instance._connectedSignals.toggled;
-
-            if (connectedToggleHandlerId) {
-                GObject.signal_handler_block(this.instance, connectedToggleHandlerId);
-            }
-
-            super.update({ set: appliedSet, unset });
-
-            if (active) {
-                this.appliedActive = active[1];
-            }
-            if (GObject.signal_handler_is_connected(this.instance, connectedToggleHandlerId)) {
-                GObject.signal_handler_unblock(this.instance, connectedToggleHandlerId);
-            }
+            this.update({ set, unset: [] });
         }
     };
 };
