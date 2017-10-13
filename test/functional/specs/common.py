@@ -12,45 +12,60 @@ DUMPS_LOCATION = 'test/functional/dumps'
 OUT_LOCATION = 'test-output' if 'OUT' not in environ else environ['OUT']
 GJS = '/usr/bin/gjs'
 
-SPACER = ' '
+def has_attribute(attr):
+    def has_attr(node):
+        try:
+            return hasattr(node, attr) and getattr(node, attr) is not None
+        except NotImplementedError as _:
+            return False
+    return has_attr
 
-ALL_STATES = [
-    [ lambda n: n.showing, "showing" ],
-    [ lambda n: n.sensitive, "sensitive" ],
-    [ lambda n: n.focusable, "focusable" ],
-    [ lambda n: n.checked, "checked" ],
-    [ lambda n: n.getState().contains(pyatspi.STATE_PRESSED), "pressed" ],
+def boolean_attribute(attr):
+    def has_boolean_attr(node):
+        return has_attribute(attr)(node) and getattr(node, attr)
+    return has_boolean_attr
+
+def has_caret_offset(node):
+    return boolean_attribute("focused")(node) and has_attribute("caretOffset")(node)
+
+INDENTATION = '  '
+ALL_ATTRIBUTES = [
+    { "name": "caretOffset", "applies": has_caret_offset, "value": lambda n: str(n.caretOffset) },
+    { "name": "checked", "applies": boolean_attribute("checked"), "value": lambda _: "true" },
+    { "name": "focusable", "applies": boolean_attribute("focusable"), "value": lambda _: "true" },
+    { "name": "focused", "applies": boolean_attribute("focused"), "value": lambda _: "true" },
+    { "name": "pressed", "applies": lambda n: n.getState().contains(pyatspi.STATE_PRESSED), "value": lambda _: "true" },
+    { "name": "showing", "applies": boolean_attribute("showing"), "value": lambda _: "true" },
+    { "name": "sensitive", "applies": boolean_attribute("sensitive"), "value": lambda _: "true" },
+    { "name": "text", "applies": has_attribute("text"), "value": lambda n: n.text },
+    { "name": "value", "applies": has_attribute("value"), "value": lambda n: n.value },
 ]
 
-def dump_state(buffer, node, depth):
-    states = [ n[1] for n in ALL_STATES if n[0](node) ]
-    buffer.write(str(SPACER * depth) + '[states | ' + str.join(' | ', states) + str(']\n'))
+def do_dump(buffer, node, depth):
+    role = node.roleName.replace(" ", "")
+    attrs = [ '{}="{}"'.format(a["name"], a["value"](node)) for a in ALL_ATTRIBUTES if a["applies"](node) ]
+    has_children = len(node.children) > 0
 
-def do_dump(buffer, item, depth):
-    buffer.write(str(SPACER * depth) + str(item))
-    if hasattr(item, "value") and item.value is not None:
-        buffer.write('[' + str(item.value) + ']')
-    if hasattr(item, "text") and item.text is not None:
-        buffer.write('[' + str(item.text) + ']')
-    buffer.write('\n')
+    opening_str = "<{role} {attrs}{self_closing}>\n".format(
+        role=role,
+        attrs=" ".join(attrs),
+        self_closing="/" if not has_children else ""
+    )
+    buffer.write(INDENTATION * depth + opening_str)
+    if has_children:
+        for child in node.children:
+            do_dump(buffer, child, depth + 1)
+        buffer.write(INDENTATION * depth + "</{role}>\n".format(role=role))
 
-def crawl(buffer, node, depth):
-    do_dump(buffer, node, depth)
-    dump_state(buffer, node, depth)
-
-    actions_keys = list(node.actions.keys())
-    actions_keys.sort()
-    for action in actions_keys:
-        do_dump(buffer, node.actions[action], depth + 1)
-    for child in node.children:
-        crawl(buffer, child, depth + 1)
+def crawl(buffer, node):
+    do_dump(buffer, node, 0)
 
 class TestCase(unittest.TestCase):
     name = "unknown"
 
     def doDump(self, node):
         with StringIO() as tmp_file:
-            crawl(tmp_file, node, 0)
+            crawl(tmp_file, node)
             return tmp_file.getvalue().rstrip()
 
     def assertDump(self, expected, node):

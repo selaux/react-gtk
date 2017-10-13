@@ -1,56 +1,30 @@
-[frame | react-gtk inputs test]
-[states | showing | sensitive]
- [filler | ]
- [states | showing | sensitive]
-  [push button | Fix Values]
-  [states | showing | sensitive | focusable]
-   [action | click |  ]
-  [filler | ]
-  [states | showing | sensitive]
-   [toggle button | Toggle Me]
-   [states | showing | sensitive | focusable]
-    [action | click |  ]
-   [label | false][false]
-   [states | showing | sensitive]
-   [push button | Activate Toggle]
-   [states | showing | sensitive | focusable]
-    [action | click |  ]
-  [filler | ]
-  [states | showing | sensitive]
-   [toggle button | ]
-   [states | showing | sensitive | focusable | checked]
-    [action | toggle |  ]
-   [label | true][true]
-   [states | showing | sensitive]
-   [push button | Activate Switch]
-   [states | showing | sensitive | focusable]
-    [action | click |  ]
-  [filler | ]
-  [states | showing | sensitive]
-   [slider | ][0.0]
-   [states | showing | sensitive | focusable]
-   [label | 0][0]
-   [states | showing | sensitive]
-   [push button | Set Scale]
-   [states | showing | sensitive | focusable]
-    [action | click |  ]
-  [filler | ]
-  [states | showing | sensitive]
-   [text | ][My Text]
-   [states | showing | sensitive | focusable]
-    [action | activate |  ]
-   [label | My Text][My Text]
-   [states | showing | sensitive]
-   [push button | Set Entry]
-   [states | showing | sensitive | focusable]
-    [action | click |  ]
-  [filler | ]
-  [states | showing | sensitive]
-   [spin button | ][0.0][0]
-   [states | showing | sensitive | focusable]
-    [action | activate |  ]
-   [label | 0][0]
-   [states | showing | sensitive]
-   [push button | Set Spin Button]
-   [states | showing | sensitive | focusable]
-    [action | click |  ]
+<frame showing="true" sensitive="true">
+  <filler showing="true" sensitive="true">
+    <pushbutton focusable="true" showing="true" sensitive="true"/>
+    <filler showing="true" sensitive="true">
+      <togglebutton focusable="true" showing="true" sensitive="true"/>
+      <label showing="true" sensitive="true" text="false"/>
+      <pushbutton focusable="true" showing="true" sensitive="true"/>
+    </filler>
+    <filler showing="true" sensitive="true">
+      <togglebutton checked="true" focusable="true" showing="true" sensitive="true"/>
+      <label showing="true" sensitive="true" text="true"/>
+      <pushbutton focusable="true" focused="true" showing="true" sensitive="true"/>
+    </filler>
+    <filler showing="true" sensitive="true">
+      <slider focusable="true" showing="true" sensitive="true" value="0.0"/>
+      <label showing="true" sensitive="true" text="0"/>
+      <pushbutton focusable="true" showing="true" sensitive="true"/>
+    </filler>
+    <filler showing="true" sensitive="true">
+      <text focusable="true" showing="true" sensitive="true" text="My Text"/>
+      <label showing="true" sensitive="true" text="My Text"/>
+      <pushbutton focusable="true" showing="true" sensitive="true"/>
+    </filler>
+    <filler showing="true" sensitive="true">
+      <spinbutton focusable="true" showing="true" sensitive="true" text="0" value="0.0"/>
+      <label showing="true" sensitive="true" text="0"/>
+      <pushbutton focusable="true" showing="true" sensitive="true"/>
+    </filler>
+  </filler>
+</frame>
