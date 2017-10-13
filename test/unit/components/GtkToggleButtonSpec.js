@@ -60,7 +60,11 @@ describe('GtkToggleButton', function () {
             const imports = getDefaultImports();
             const GtkToggleButton = injectGtkToggleButton(imports, logStub);
 
-            const instance = { connect: sinon.stub(), get_active: sinon.stub().returns(true), set_active: sinon.stub() };
+            const instance = {
+                connect: sinon.stub(),
+                get_active: sinon.stub().returns(true),
+                set_active: sinon.stub()
+            };
             imports.gi.Gtk.ToggleButton.returns(instance);
             imports.gi.GObject.signal_lookup.returns(1);
 
@@ -80,7 +84,11 @@ describe('GtkToggleButton', function () {
             const imports = getDefaultImports();
             const GtkToggleButton = injectGtkToggleButton(imports, logStub);
 
-            const instance = { connect: sinon.stub(), get_active: sinon.stub().returns(true), set_active: sinon.stub() };
+            const instance = {
+                connect: sinon.stub(),
+                get_active: sinon.stub().returns(true),
+                set_active: sinon.stub()
+            };
             imports.gi.Gtk.ToggleButton.returns(instance);
             imports.gi.GObject.signal_lookup.returns(1);
 
@@ -99,7 +107,11 @@ describe('GtkToggleButton', function () {
             const imports = getDefaultImports();
             const GtkToggleButton = injectGtkToggleButton(imports, logStub);
 
-            const instance = { connect: sinon.stub().returns(123), get_active: sinon.stub().returns(true), set_active: sinon.stub() };
+            const instance = {
+                connect: sinon.stub().returns(123),
+                get_active: sinon.stub().returns(true),
+                set_active: sinon.stub()
+            };
             imports.gi.Gtk.ToggleButton.returns(instance);
             imports.gi.GObject.signal_lookup.returns(1);
 
@@ -115,7 +127,11 @@ describe('GtkToggleButton', function () {
             const imports = getDefaultImports();
             const GtkToggleButton = injectGtkToggleButton(imports, logStub);
 
-            const instance = { connect: sinon.stub().returns(123), get_active: sinon.stub().returns(true), set_active: sinon.stub() };
+            const instance = {
+                connect: sinon.stub().returns(123),
+                get_active: sinon.stub().returns(true),
+                set_active: sinon.stub()
+            };
             imports.gi.Gtk.ToggleButton.returns(instance);
             imports.gi.GObject.signal_lookup.returns(1);
 

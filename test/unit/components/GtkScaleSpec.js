@@ -100,7 +100,11 @@ describe('GtkScale', function () {
             const imports = getDefaultImports();
             const GtkScale = injectGtkScale(imports, logStub);
 
-            const instance = { connect: sinon.stub().returns(123), get_value: sinon.stub().returns(1), set_value: sinon.stub() };
+            const instance = {
+                connect: sinon.stub().returns(123),
+                get_value: sinon.stub().returns(1),
+                set_value: sinon.stub()
+            };
             imports.gi.Gtk.Scale.returns(instance);
             imports.gi.GObject.signal_lookup.withArgs('value-changed').returns(1);
 
@@ -116,7 +120,11 @@ describe('GtkScale', function () {
             const imports = getDefaultImports();
             const GtkScale = injectGtkScale(imports, logStub);
 
-            const instance = { connect: sinon.stub().returns(123), get_value: sinon.stub().returns(1), set_value: sinon.stub() };
+            const instance = {
+                connect: sinon.stub().returns(123),
+                get_value: sinon.stub().returns(1),
+                set_value: sinon.stub()
+            };
             imports.gi.Gtk.Scale.returns(instance);
             imports.gi.GObject.signal_lookup.withArgs('value-changed').returns(1);
             imports.gi.GObject.signal_handler_is_connected.withArgs(instance, 123).returns(true);
