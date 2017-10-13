@@ -1,4 +1,6 @@
 const R = require('ramda');
+const isControlled = require('./controlled/isControlled');
+const wrapUpdate = require('./controlled/wrapUpdate');
 
 function wrapOnChanged(instance, onChanged) {
     return function wrappedonChanged(entry) {
@@ -7,14 +9,13 @@ function wrapOnChanged(instance, onChanged) {
         }
 
         if (instance.isControlled()) {
-            entry.set_text(instance.appliedText);
+            entry.set_text(instance.value);
         }
     };
 }
 
 module.exports = function (imports) {
     const GtkWidget = require('./GtkWidget')(imports);
-    const GObject = imports.gi.GObject;
 
     return class GtkEntry extends GtkWidget {
         get InternalType() {
@@ -26,40 +27,17 @@ module.exports = function (imports) {
             const set = [
                 [ 'onChanged', props.onChanged ],
                 [ 'text', props.text ]
-            ].filter(([ prop, value ]) => typeof value !== 'undefined');
+            ].filter(([ , value ]) => typeof value !== 'undefined');
 
             super(appliedProps, ...args);
 
+            this.isControlled = isControlled.bind(this);
+            this.update = wrapUpdate(imports, {
+                handler: 'onChanged',
+                wrappingFn: wrapOnChanged
+            }, this.update);
+
             this.update({ set, unset: [] });
-        }
-
-        isControlled() {
-            return typeof this.appliedText !== 'undefined';
-        }
-
-        update(changes) {
-            const { set, unset } = changes;
-            const value = set.find(([ prop ]) => prop === 'text');
-            const appliedSet = set.map(([ prop, value ]) => {
-                if (prop === 'onChanged') {
-                    return [ prop, wrapOnChanged(this, value) ];
-                }
-                return [ prop, value ];
-            });
-            const connectedToggleHandlerId = this.instance._connectedSignals.changed;
-
-            if (connectedToggleHandlerId) {
-                GObject.signal_handler_block(this.instance, connectedToggleHandlerId);
-            }
-
-            super.update({ set: appliedSet, unset });
-
-            if (value) {
-                this.appliedText = value[1];
-            }
-            if (GObject.signal_handler_is_connected(this.instance, connectedToggleHandlerId)) {
-                GObject.signal_handler_unblock(this.instance, connectedToggleHandlerId);
-            }
         }
     };
 };
