@@ -1,3 +1,7 @@
+// Monkeypatch process for react
+global.console.error = global.console.log;
+global.process = { env: {} };
+
 const ReactGtk = require('../src/index');
 const React = require('react');
 const Component = React.Component;
