@@ -1,8 +1,8 @@
-const ReactFiberReconciler = require('react-dom/lib/ReactFiberReconciler');
+const Reconciler = require('react-reconciler');
 
 module.exports = function (imports, reconciler) {
     const roots = new Map();
-    const GtkReconciler = new ReactFiberReconciler(reconciler);
+    const GtkReconciler = new Reconciler(reconciler);
     const ReactGtk = {
         render(element, callback, container) {
             const containerKey = typeof container === 'undefined' ? callback : container;

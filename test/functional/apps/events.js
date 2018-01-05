@@ -1,23 +1,25 @@
 const runApp = require('./runApp');
 const React = require('react');
 const h = React.createElement;
+const Component = React.Component;
 
-const EventsApp = React.createClass({
-    getInitialState() {
-        return { disableEvent: false, value: 0, increment: 1 };
-    },
+class EventsApp extends Component {
+    constructor() {
+        super();
+        this.state = { disableEvent: false, value: 0, increment: 1 };
+    }
 
     toggleEvent() {
         this.setState({ disableEvent: !this.state.disableEvent });
-    },
+    }
 
     increase(inc) {
         this.setState({ value: this.state.value + inc });
-    },
+    }
 
     increaseIncrement() {
         this.setState({ increment: this.state.increment + 1 });
-    },
+    }
 
     render() {
         const valueLabel = `Value: ${this.state.value}`;
@@ -30,10 +32,10 @@ const EventsApp = React.createClass({
             h('GtkVBox', {}, [
                 h('GtkLabel', { key: 0, label: valueLabel }),
                 h('GtkButton', buttonProps),
-                h('GtkButton', { key: 2, label: 'Increase Increment', onClicked: this.increaseIncrement }),
-                h('GtkButton', { key: 3, label: buttonLabel, onClicked: this.toggleEvent })
+                h('GtkButton', { key: 2, label: 'Increase Increment', onClicked: this.increaseIncrement.bind(this) }),
+                h('GtkButton', { key: 3, label: buttonLabel, onClicked: this.toggleEvent.bind(this) })
             ]));
     }
-});
+}
 
 runApp(EventsApp);
