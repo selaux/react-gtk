@@ -71,6 +71,10 @@ module.exports = function (imports) {
             throw new Error(`Cannot add children to a ${ this.InternalType}`);
         }
 
+        insertBefore() {
+            throw new Error(`Cannot add children to a ${ this.InternalType}`);
+        }
+
         removeChild() {
             throw new Error(`Cannot remove children from a ${ this.InternalType}`);
         }

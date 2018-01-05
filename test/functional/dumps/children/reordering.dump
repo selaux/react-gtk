@@ -1,0 +1,18 @@
+<frame showing="true" sensitive="true">
+  <filler showing="true" sensitive="true">
+    <filler showing="true" sensitive="true">
+      <pushbutton focusable="true" showing="true" sensitive="true"/>
+      <pushbutton focusable="true" focused="true" showing="true" sensitive="true"/>
+      <pushbutton focusable="true" showing="true" sensitive="true"/>
+      <pushbutton focusable="true" showing="true" sensitive="true"/>
+      <pushbutton focusable="true" showing="true" sensitive="true"/>
+      <pushbutton focusable="true" showing="true" sensitive="true"/>
+    </filler>
+    <filler showing="true" sensitive="true">
+      <label showing="true" sensitive="true" text="This is 3"/>
+      <label showing="true" sensitive="true" text="This is 4"/>
+      <label showing="true" sensitive="true" text="This is 1"/>
+      <label showing="true" sensitive="true" text="This is 2"/>
+    </filler>
+  </filler>
+</frame>

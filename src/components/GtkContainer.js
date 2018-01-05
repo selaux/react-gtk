@@ -7,7 +7,19 @@ module.exports = function (imports) {
         }
 
         appendChild(child) {
-            this.instance.add(child.instance);
+            const children = this.instance.get_children();
+
+            if (!children.includes(child.instance)) {
+                this.instance.add(child.instance);
+            }
+        }
+
+        insertBefore(child) {
+            const children = this.instance.get_children();
+
+            if (!children.includes(child.instance)) {
+                this.instance.add(child.instance);
+            }
         }
 
         removeChild(child) {

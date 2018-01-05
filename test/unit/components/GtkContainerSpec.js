@@ -31,7 +31,7 @@ describe('GtkContainer', function () {
         const imports = getDefaultImports();
         const GtkContainer = injectGtkContainer(imports, logStub);
 
-        const instance = { add: sinon.spy() };
+        const instance = { add: sinon.spy(), get_children: sinon.stub().returns([]) };
         imports.gi.Gtk.Container.returns(instance);
 
         const gotInstance = new GtkContainer({});
@@ -39,6 +39,48 @@ describe('GtkContainer', function () {
 
         expect(instance.add.callCount).to.equal(1);
         expect(instance.add.firstCall.args).to.deep.equal([ 'mychild' ]);
+    });
+
+    it('should not append children if they are already their children', function () {
+        const imports = getDefaultImports();
+        const GtkContainer = injectGtkContainer(imports, logStub);
+
+        const childInstance = { my: 'child' };
+        const instance = { add: sinon.spy(), get_children: sinon.stub().returns([ childInstance ]) };
+        imports.gi.Gtk.Container.returns(instance);
+
+        const gotInstance = new GtkContainer({});
+        gotInstance.appendChild({ instance: childInstance });
+
+        expect(instance.add.callCount).to.equal(0);
+    });
+
+    it('should append children if they use insertBefore', function () {
+        const imports = getDefaultImports();
+        const GtkContainer = injectGtkContainer(imports, logStub);
+
+        const instance = { add: sinon.spy(), get_children: sinon.stub().returns([]) };
+        imports.gi.Gtk.Container.returns(instance);
+
+        const gotInstance = new GtkContainer({});
+        gotInstance.insertBefore({ instance: 'mychild' });
+
+        expect(instance.add.callCount).to.equal(1);
+        expect(instance.add.firstCall.args).to.deep.equal([ 'mychild' ]);
+    });
+
+    it('should not append children using insertBefore if they are already their children', function () {
+        const imports = getDefaultImports();
+        const GtkContainer = injectGtkContainer(imports, logStub);
+
+        const childInstance = { my: 'child' };
+        const instance = { add: sinon.spy(), get_children: sinon.stub().returns([ childInstance ]) };
+        imports.gi.Gtk.Container.returns(instance);
+
+        const gotInstance = new GtkContainer({});
+        gotInstance.insertBefore({ instance: childInstance });
+
+        expect(instance.add.callCount).to.equal(0);
     });
 
     it('should remove children', function () {

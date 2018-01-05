@@ -78,6 +78,7 @@ in
           $machine->sleep(1);
 
           my $out = './test-output';
+          $machine->succeed("su - alice -c 'DISPLAY=:0.0 GTK_MODULES='gail:atk-bridge' OUT=$out ${testCases}/bin/children_spec.py'");
           $machine->succeed("su - alice -c 'DISPLAY=:0.0 GTK_MODULES='gail:atk-bridge' OUT=$out ${testCases}/bin/events_spec.py'");
           $machine->succeed("su - alice -c 'DISPLAY=:0.0 GTK_MODULES='gail:atk-bridge' OUT=$out ${testCases}/bin/inputs_spec.py'");
 

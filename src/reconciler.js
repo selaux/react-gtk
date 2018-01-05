@@ -49,7 +49,7 @@ module.exports = function (imports, publicComponents, log) {
         },
 
         prepareForCommit() {
-            // log('prepareForCommit');
+            log('prepareForCommit');
         },
 
         prepareUpdate(
@@ -71,7 +71,7 @@ module.exports = function (imports, publicComponents, log) {
         },
 
         resetAfterCommit() {
-            // log('resetAfterCommit');
+            log('resetAfterCommit');
         },
 
         resetTextContent(instance) {
@@ -120,12 +120,19 @@ module.exports = function (imports, publicComponents, log) {
             },
 
             insertBefore(parentInstance, child, beforeChild) {
-                log('insertBefore');
-                // parentInstance.insertBefore(child, beforeChild);
+                log('insertInContainerBefore', parentInstance, child, beforeChild);
+                child.instance.show();
+                if (!R.is(Gtk.Application, parentInstance)) {
+                    parentInstance.insertBefore(child, beforeChild);
+                }
             },
 
             insertInContainerBefore(parentInstance, child, beforeChild) {
-                log('insertInContainerBefore');
+                log('insertInContainerBefore', parentInstance, child, beforeChild);
+                child.instance.show();
+                if (!R.is(Gtk.Application, parentInstance)) {
+                    parentInstance.insertBefore(child, beforeChild);
+                }
             },
 
             removeChild(parentInstance, child) {
