@@ -102,6 +102,7 @@ describe('GtkScale', function () {
 
             const instance = {
                 connect: sinon.stub().returns(123),
+                disconnect: sinon.stub(),
                 get_value: sinon.stub().returns(1),
                 set_value: sinon.stub()
             };
@@ -122,6 +123,7 @@ describe('GtkScale', function () {
 
             const instance = {
                 connect: sinon.stub().returns(123),
+                disconnect: sinon.stub(),
                 get_value: sinon.stub().returns(1),
                 set_value: sinon.stub()
             };

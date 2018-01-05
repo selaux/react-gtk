@@ -109,6 +109,7 @@ describe('GtkSwitch', function () {
 
             const instance = {
                 connect: sinon.stub().returns(123),
+                disconnect: sinon.stub(),
                 get_active: sinon.stub().returns(true),
                 set_active: sinon.stub()
             };
@@ -129,6 +130,7 @@ describe('GtkSwitch', function () {
 
             const instance = {
                 connect: sinon.stub().returns(123),
+                disconnect: sinon.stub(),
                 get_active: sinon.stub().returns(true),
                 set_active: sinon.stub()
             };

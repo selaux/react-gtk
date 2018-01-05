@@ -83,8 +83,9 @@ module.exports = function (imports) {
             )(changes.set);
             const signalHandlersToUnset = R.filter(isValidHandler, changes.unset);
 
-            updateSignalHandlers(this.instance, signalHandlersToSet, signalHandlersToUnset);
+            // Make properties apply first, so change handlers wont get triggered by updates -- hacky
             updateProperties(this.instance, changes.set, changes.unset);
+            updateSignalHandlers(this.instance, signalHandlersToSet, signalHandlersToUnset);
         }
     };
 };

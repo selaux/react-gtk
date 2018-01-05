@@ -116,6 +116,7 @@ describe('GtkEntry', function () {
 
             const instance = {
                 connect: sinon.stub().withArgs('changed').returns(123),
+                disconnect: sinon.stub(),
                 set_text: sinon.stub(),
                 get_text: sinon.stub().returns('text')
             };
@@ -136,6 +137,7 @@ describe('GtkEntry', function () {
 
             const instance = {
                 connect: sinon.stub().withArgs('changed').returns(123),
+                disconnect: sinon.stub(),
                 set_text: sinon.stub(),
                 get_text: sinon.stub().returns('text')
             };
