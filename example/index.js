@@ -1,4 +1,4 @@
-const ReactGtk = require('../src/index');
+const ReactGtk = require('../src/index').ReactGtk;
 const React = require('react');
 const Component = React.Component;
 const h = React.createElement;
