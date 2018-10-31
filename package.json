@@ -42,6 +42,12 @@
     "env": {
       "node": true
     },
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "ecmaFeatures": {
+          "jsx": true
+      }
+    },
     "rules": {
       "max-params": [
         "error",

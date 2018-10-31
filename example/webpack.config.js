@@ -2,11 +2,11 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-    entry: path.resolve(__dirname, 'index.js'),
+    entry: path.resolve(__dirname, 'index.jsx'),
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: /\.jsx?$/,
                 exclude: /(node_modules|bower_components)/,
                 use: {
                     loader: 'babel-loader',

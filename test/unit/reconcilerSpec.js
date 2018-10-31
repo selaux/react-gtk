@@ -20,7 +20,7 @@ describe('reconciler', function () {
             const Reconciler = createReconciler(imports, {}, logStub);
 
             expect(() => Reconciler.createInstance('foo', {}, null, null, null))
-                .to.throw("Unknown component: foo");
+                .to.throw('Unknown component: foo');
         });
     });
 
@@ -30,7 +30,7 @@ describe('reconciler', function () {
             const Reconciler = createReconciler(imports, {}, logStub);
 
             expect(() => Reconciler.createTextInstance('foo', null, null, null))
-                .to.throw("ReactGTK does not support text instances. Use gtk-label to display text");
+                .to.throw('ReactGTK does not support text instances. Use gtk-label to display text');
         });
     });
 

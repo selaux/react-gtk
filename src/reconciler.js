@@ -31,7 +31,7 @@ module.exports = function (imports, publicComponents, log) {
             internalInstanceHandle
         ) {
             log('createTextInstance');
-            throw new Error(`ReactGTK does not support text instances. Use gtk-label to display text`);
+            throw new Error('ReactGTK does not support text instances. Use gtk-label to display text');
         },
 
         appendInitialChild(parentInstance, child) {
