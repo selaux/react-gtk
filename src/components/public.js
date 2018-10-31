@@ -1,16 +1,16 @@
 module.exports = function (imports) {
     return {
-        GtkBin: require('./GtkBin')(imports),
-        GtkBox: require('./GtkBox')(imports),
-        GtkButton: require('./GtkButton')(imports),
-        GtkEntry: require('./GtkEntry')(imports),
-        GtkHBox: require('./GtkHBox')(imports),
-        GtkHScale: require('./GtkHScale')(imports),
-        GtkLabel: require('./GtkLabel')(imports),
-        GtkSwitch: require('./GtkSwitch')(imports),
-        GtkToggleButton: require('./GtkToggleButton')(imports),
-        GtkWindow: require('./GtkWindow')(imports),
-        GtkVBox: require('./GtkVBox')(imports),
-        GtkVScale: require('./GtkVScale')(imports)
+        'gtk-bin': require('./GtkBin')(imports),
+        'gtk-box': require('./GtkBox')(imports),
+        'gtk-button': require('./GtkButton')(imports),
+        'gtk-entry': require('./GtkEntry')(imports),
+        'gtk-hbox': require('./GtkHBox')(imports),
+        'gtk-hscale': require('./GtkHScale')(imports),
+        'gtk-label': require('./GtkLabel')(imports),
+        'gtk-switch': require('./GtkSwitch')(imports),
+        'gtk-togglebutton': require('./GtkToggleButton')(imports),
+        'gtk-window': require('./GtkWindow')(imports),
+        'gtk-vbox': require('./GtkVBox')(imports),
+        'gtk-vscale': require('./GtkVScale')(imports)
     };
 };

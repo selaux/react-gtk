@@ -16,6 +16,11 @@ module.exports = function (imports, publicComponents, log) {
         createInstance(type, props, rootContainerInstance, hostContext, internalInstanceHandle) {
             log('createInstance', type, props);
             const Type = publicComponents[type];
+
+            if (!Type) {
+                throw new Error(`Unknown component: ${type}`);
+            }
+
             return new Type(props, rootContainerInstance, hostContext, internalInstanceHandle);
         },
 
@@ -26,7 +31,7 @@ module.exports = function (imports, publicComponents, log) {
             internalInstanceHandle
         ) {
             log('createTextInstance');
-            return null;
+            throw new Error(`ReactGTK does not support text instances. Use gtk-label to display text`);
         },
 
         appendInitialChild(parentInstance, child) {

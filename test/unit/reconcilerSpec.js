@@ -14,6 +14,26 @@ describe('reconciler', function () {
     });
     const logStub = () => {};
 
+    describe('create instance', function () {
+        it('should throw for unknown components', () => {
+            const imports = getDefaultImports();
+            const Reconciler = createReconciler(imports, {}, logStub);
+
+            expect(() => Reconciler.createInstance('foo', {}, null, null, null))
+                .to.throw("Unknown component: foo");
+        });
+    });
+
+    describe('create text instance', function () {
+        it('should throw because text instances are unsupported', () => {
+            const imports = getDefaultImports();
+            const Reconciler = createReconciler(imports, {}, logStub);
+
+            expect(() => Reconciler.createTextInstance('foo', null, null, null))
+                .to.throw("ReactGTK does not support text instances. Use gtk-label to display text");
+        });
+    });
+
     describe('preparing update', function () {
         it('should return null if props are equal', function () {
             const imports = getDefaultImports();

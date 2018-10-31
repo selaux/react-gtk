@@ -1,5 +1,3 @@
-const R = require('ramda');
-
 const createRenderer = require('./renderer');
 const createReconciler = require('./reconciler');
 const publicComponents = require('./components/public')(imports);
@@ -13,6 +11,4 @@ function log(...args) {
     }
 }
 
-module.exports = R.merge({
-    ReactGtk: createRenderer(imports, createReconciler(imports, publicComponents, log))
-}, publicComponents);
+module.exports = createRenderer(imports, createReconciler(imports, publicComponents, log));

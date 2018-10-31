@@ -60,31 +60,31 @@ class InputsApp extends Component {
     }
 
     render() {
-        return h('GtkWindow', { title: 'react-gtk inputs test', defaultWidth: 200, defaultHeight: 100 },
-            h('GtkVBox', {}, [
-                h('GtkButton', {
+        return h('gtk-window', { title: 'react-gtk inputs test', defaultWidth: 200, defaultHeight: 100 },
+            h('gtk-vbox', {}, [
+                h('gtk-button', {
                     label: this.state.fixedValues ? 'Unfix Values' : 'Fix Values',
                     onClicked: this.toggleFixedValues.bind(this)
                 }),
-                h('GtkHBox', { key: 0 }, [
-                    h('GtkToggleButton', {
+                h('gtk-hbox', { key: 0 }, [
+                    h('gtk-togglebutton', {
                         label: 'Toggle Me',
                         onToggled: this.onToggleButton.bind(this),
                         active: this.state.toggleButtonActive
                     }),
-                    h('GtkLabel', { label: this.state.toggleButtonActive.toString() }),
-                    h('GtkButton', { label: 'Activate Toggle', onClicked: this.setToggleButtonActive.bind(this) })
+                    h('gtk-label', { label: this.state.toggleButtonActive.toString() }),
+                    h('gtk-button', { label: 'Activate Toggle', onClicked: this.setToggleButtonActive.bind(this) })
                 ]),
-                h('GtkHBox', { key: 1 }, [
-                    h('GtkSwitch', {
+                h('gtk-hbox', { key: 1 }, [
+                    h('gtk-switch', {
                         active: this.state.switchActive,
                         onToggled: this.onSwitch.bind(this)
                     }),
-                    h('GtkLabel', { label: this.state.switchActive.toString() }),
-                    h('GtkButton', { label: 'Activate Switch', onClicked: this.setSwitchActive.bind(this) })
+                    h('gtk-label', { label: this.state.switchActive.toString() }),
+                    h('gtk-button', { label: 'Activate Switch', onClicked: this.setSwitchActive.bind(this) })
                 ]),
-                h('GtkHBox', { key: 2 }, [
-                    h('GtkHScale', {
+                h('gtk-hbox', { key: 2 }, [
+                    h('gtk-hscale', {
                         drawValue: true,
                         lower: -5,
                         upper: 5,
@@ -92,13 +92,13 @@ class InputsApp extends Component {
                         value: this.state.scaleValue,
                         onValueChanged: this.onScale.bind(this)
                     }),
-                    h('GtkLabel', { label: this.state.scaleValue.toString() }),
-                    h('GtkButton', { label: 'Set Scale', onClicked: this.setScaleValue.bind(this) })
+                    h('gtk-label', { label: this.state.scaleValue.toString() }),
+                    h('gtk-button', { label: 'Set Scale', onClicked: this.setScaleValue.bind(this) })
                 ]),
-                h('GtkHBox', { key: 3 }, [
-                    h('GtkEntry', { text: this.state.entryText, onChanged: this.onEntry.bind(this) }),
-                    h('GtkLabel', { label: this.state.entryText }),
-                    h('GtkButton', { label: 'Set Entry', onClicked: this.setEntryText.bind(this) })
+                h('gtk-hbox', { key: 3 }, [
+                    h('gtk-entry', { text: this.state.entryText, onChanged: this.onEntry.bind(this) }),
+                    h('gtk-label', { label: this.state.entryText }),
+                    h('gtk-button', { label: 'Set Entry', onClicked: this.setEntryText.bind(this) })
                 ])
             ]));
     }

@@ -28,12 +28,12 @@ class EventsApp extends Component {
         const buttonBaseProps = { key: 1, label: 'Increase' };
         const buttonProps = onClicked ? Object.assign(buttonBaseProps, { onClicked }) : buttonBaseProps;
 
-        return h('GtkWindow', { title: 'react-gtk events test', defaultWidth: 200, defaultHeight: 100 },
-            h('GtkVBox', {}, [
-                h('GtkLabel', { key: 0, label: valueLabel }),
-                h('GtkButton', buttonProps),
-                h('GtkButton', { key: 2, label: 'Increase Increment', onClicked: this.increaseIncrement.bind(this) }),
-                h('GtkButton', { key: 3, label: buttonLabel, onClicked: this.toggleEvent.bind(this) })
+        return h('gtk-window', { title: 'react-gtk events test', defaultWidth: 200, defaultHeight: 100 },
+            h('gtk-vbox', {}, [
+                h('gtk-label', { key: 0, label: valueLabel }),
+                h('gtk-button', buttonProps),
+                h('gtk-button', { key: 2, label: 'Increase Increment', onClicked: this.increaseIncrement.bind(this) }),
+                h('gtk-button', { key: 3, label: buttonLabel, onClicked: this.toggleEvent.bind(this) })
             ]));
     }
 }

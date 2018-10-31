@@ -1,7 +1,6 @@
-const ReactGtk = require('../src/index').ReactGtk;
+const ReactGtk = require('../src/index');
 const React = require('react');
 const Component = React.Component;
-const h = React.createElement;
 
 const Gtk = imports.gi.Gtk;
 const Application = Gtk.Application;
@@ -19,12 +18,12 @@ class MyApp extends Component {
     render() {
         const label = `${this.state.clicks} Click${this.state.clicks === 1 ? '' : 's'}`;
 
-        return h('GtkWindow', { title: 'Increase me', defaultWidth: 640, defaultHeight: 480 },
-            h('GtkVBox', {}, [
-                h('GtkLabel', { label }),
-                h('GtkButton', { label: 'Click me!', onClicked: this.increaseClicks.bind(this) })
-            ])
-        );
+        return <gtk-window title='Increase me' defaultWidth={640} defaultHeight={480}>
+            <gtk-vbox>
+                <gtk-label label={label} />
+                <gtk-button label='Click me!' onClicked={this.increaseClicks.bind(this)} />
+            </gtk-vbox>
+        </gtk-window>;
     }
 }
 
@@ -33,7 +32,7 @@ Gtk.init(null);
 const app = new Application();
 
 app.connect('activate', () => {
-    ReactGtk.render(h(MyApp), app);
+    ReactGtk.render(<MyApp />, app);
 });
 
 print('Starting app');
